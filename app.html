@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1B2440">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Best Work Campo</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg">
+<link rel="apple-touch-icon" href="assets/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css?v=2">
+<style>
+  body { background: radial-gradient(circle at 30% 20%, #26335a, var(--navy) 60%); min-height: 100vh; display: grid; place-items: center; padding: 70px 16px 24px; }
+  .phone { width: 390px; height: min(844px, calc(100vh - 94px)); background: var(--bg); border-radius: 44px; overflow: hidden; position: relative; box-shadow: 0 0 0 10px #0b1022, 0 0 0 12px #2b3554, 0 40px 80px rgba(0,0,0,.5); display: flex; flex-direction: column; }
+  .side-note { position: fixed; left: 32px; top: 50%; transform: translateY(-50%); max-width: 260px; color: #cbd5e1; font-size: 14px; line-height: 1.6; }
+  .side-note b { color: var(--gold); font-family: var(--display); font-size: 18px; display: block; margin-bottom: 8px; }
+  @media (max-width: 1000px) { .side-note { display: none; } }
+  @media (max-width: 520px) {
+    body { padding: 0; display: block; background: var(--bg); }
+    .phone { width: 100%; height: 100dvh; border-radius: 0; box-shadow: none; }
+    .demo-nav { display: none; }
+  }
+  .demo-nav { top: 12px; bottom: auto; }
+
+  .appbar { background: var(--navy); color: #fff; padding: 46px 20px 18px; flex: none; }
+  @media (max-width: 520px) { .appbar { padding-top: max(18px, env(safe-area-inset-top)); } }
+  .appbar .row { display: flex; align-items: center; gap: 10px; }
+  .appbar h1 { font-size: 20px; }
+  .appbar small { color: #94a3b8; font-size: 13px; }
+  .appbar .back { background: rgba(255,255,255,.1); border: 0; color: #fff; width: 36px; height: 36px; border-radius: 10px; font-size: 20px; cursor: pointer; }
+  .avatar { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-weight: 700; color: #fff; font-family: var(--display); margin-left: auto; cursor: pointer; }
+  .net { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #a7f3d0; margin-top: 6px; }
+  .net i { width: 7px; height: 7px; border-radius: 50%; background: #34d399; }
+  .net.off { color: #fde68a; } .net.off i { background: #fbbf24; }
+
+  .scroll { flex: 1; overflow-y: auto; padding: 16px 16px 24px; display: grid; gap: 12px; align-content: start; }
+  .tabbar { flex: none; display: flex; background: #fff; border-top: 1px solid var(--line); padding: 8px 8px 22px; }
+  @media (max-width: 520px) { .tabbar { padding-bottom: max(10px, env(safe-area-inset-bottom)); } }
+  .tabbar button { flex: 1; border: 0; background: none; padding: 6px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; display: grid; justify-items: center; gap: 3px; }
+  .tabbar button.on { color: var(--navy); }
+  .tabbar svg { width: 22px; height: 22px; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat { background: #fff; border-radius: 14px; padding: 12px; text-align: center; border: 1px solid var(--line); }
+  .stat b { font-family: var(--display); font-size: 22px; color: var(--navy); display: block; }
+  .stat span { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+
+  .jc { background: #fff; border-radius: 16px; padding: 16px; border: 1px solid var(--line); display: grid; gap: 8px; cursor: pointer; position: relative; }
+  .jc:active { transform: scale(.99); }
+  .jc .time { font-family: var(--display); font-weight: 700; color: var(--navy); font-size: 17px; }
+  .jc .addr { color: var(--muted); font-size: 13.5px; }
+  .jc .svcs { font-size: 14px; }
+  .jc.done { opacity: .7; }
+  .jc .stripe { position: absolute; left: 0; top: 14px; bottom: 14px; width: 4px; border-radius: 0 4px 4px 0; background: var(--blue); }
+  .jc.done .stripe { background: var(--green); } .jc.prog .stripe { background: var(--gold); }
+  .sec { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; margin: 6px 4px 0; }
+
+  .panel { background: #fff; border-radius: 16px; padding: 16px; border: 1px solid var(--line); display: grid; gap: 12px; }
+  .panel h3 { font-size: 15px; color: var(--navy); display: flex; justify-content: space-between; align-items: center; }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .actions a { text-decoration: none; }
+  .note { background: #fffbeb; border: 1px solid #fde68a; color: #78350f; border-radius: 12px; padding: 10px 12px; font-size: 13.5px; }
+  .photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .photos img, .photos .add { width: 100%; aspect-ratio: 4/3;object-fit: cover; border-radius: 10px; }
+  .photos .add { border: 2px dashed #cbd5e1; display: grid; place-items: center; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; background: #f8fafc; }
+  .photos .add span { font-size: 24px; display: block; line-height: 1; }
+  .sample { background: none; border: 0; color: var(--blue); font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 0; text-decoration: underline; justify-self: start; }
+  .lines { display: grid; gap: 8px; }
+  .line { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 14px; }
+  .line label { display: flex; gap: 10px; align-items: center; }
+  .line input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--navy); }
+  .total { display: flex; justify-content: space-between; font-family: var(--display); font-weight: 700; color: var(--navy); font-size: 20px; border-top: 1px solid var(--line); padding-top: 10px; }
+  .methods { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .methods button { border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 11px 8px; font-weight: 600; font-size: 13.5px; cursor: pointer; }
+  .methods button.on { border-color: var(--navy); background: var(--navy); color: #fff; }
+  .big { width: 100%; padding: 16px; font-size: 16px; border-radius: 14px; }
+  .success { text-align: center; display: grid; gap: 14px; justify-items: center; padding: 30px 10px; }
+  .success .ck { width: 84px; height: 84px; border-radius: 50%; background: #E3F5DE; color: #2f7a1f; display: grid; place-items: center; font-size: 42px; font-weight: 800; }
+  .techs { display: grid; gap: 10px; }
+  .tcard { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px; cursor: pointer; font-weight: 600; }
+  .tcard:hover { border-color: var(--navy); }
+  .install { background: linear-gradient(90deg, var(--navy), var(--blue)); color: #fff; border-radius: 14px; padding: 12px 14px; font-size: 13px; display: flex; gap: 10px; align-items: center; }
+  .install b { color: var(--gold); }
+  .toast-wrap { left: 50%; right: auto; transform: translateX(-50%); bottom: 90px; }
+</style>
+</head>
+<body>
+<div class="side-note"><b>App de campo (PWA)</b>Se instala en el celular desde el navegador, sin tienda de apps. Cada técnico ve su agenda, sube fotos de antes y después y registra el cobro. Todo llega solo a la plataforma de David.<br><br>Ábrela al lado de la plataforma y cierra un trabajo: lo verás aparecer en vivo.</div>
+<div class="phone" id="phone"></div>
+<input type="file" accept="image/*" capture="environment" id="cam" hidden multiple>
+<div class="toast-wrap" id="toasts"></div>
+<nav class="demo-nav"><span class="tag">Demo</span><a href="index.html">Landing</a><a href="admin.html">Plataforma</a><a class="on" href="app.html">App de campo</a></nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js?v=3"></script>
+<script src="assets/store.js?v=3"></script>
+<script>
+const { PLANS, SERVICES, TECHS, PAY_METHODS, helpers: H } = DB;
+const { usd, esc, svc, tech, fmtDate } = H;
+const TECH_KEY = 'nmbw-demo-tech';
+let S = DB.load();
+const ui = { screen: 'today', jobId: null, draft: null, photoTarget: null };
+let techId = null;
+try { techId = localStorage.getItem(TECH_KEY); } catch (e) {}
+
+function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = '<span>' + msg + '</span>'; document.getElementById('toasts').appendChild(t); setTimeout(() => t.remove(), 3800); }
+const client = (id) => S.clients.find((c) => c.id === id) || { name: 'Cliente', address: '', phone: '' };
+const svcList = (ids) => ids.map((id) => svc(id).es).join(' + ');
+const initials = (n) => n.split(' ').map((x) => x[0]).slice(0, 2).join('');
+const online = () => navigator.onLine;
+const ICON = {
+  today: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z"/></svg>',
+  sum: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9h3v11H5zm5.5-5h3v16h-3zM16 13h3v7h-3z"/></svg>',
+};
+
+function appbar(title, sub, back) {
+  const t = tech(techId);
+  return `<div class="appbar"><div class="row">${back ? `<button class="back" data-a="back">‹</button>` : ''}<div><h1>${title}</h1><small>${sub}</small></div>${techId ? `<div class="avatar" data-a="logout" title="Cambiar técnico" style="background:${t.color}">${initials(t.name)}</div>` : ''}</div>
+  <div class="net ${online() ? '' : 'off'}"><i></i>${online() ? 'En línea · sincronizado con la plataforma' : 'Sin señal · se guarda y se envía al volver la conexión'}</div></div>`;
+}
+const tabbar = () => `<div class="tabbar"><button data-a="tab" data-v="today" class="${ui.screen === 'today' ? 'on' : ''}">${ICON.today}Hoy</button><button data-a="tab" data-v="summary" class="${ui.screen === 'summary' ? 'on' : ''}">${ICON.sum}Mi resumen</button></div>`;
+
+function render() {
+  const el = document.getElementById('phone');
+  if (!techId) { el.innerHTML = vLogin(); return; }
+  if (ui.screen === 'job') el.innerHTML = vJob();
+  else if (ui.screen === 'done') el.innerHTML = vDone();
+  else if (ui.screen === 'summary') el.innerHTML = vSummary();
+  else el.innerHTML = vToday();
+}
+
+function vLogin() {
+  return `<div class="appbar"><div class="row"><div><h1>Best Work Campo</h1><small>Near Me Best Work</small></div></div></div>
+  <div class="scroll"><div class="sec">¿Quién eres?</div><div class="techs">${TECHS.map((t) => `<div class="tcard" data-a="login" data-id="${t.id}"><div class="avatar" style="margin:0; background:${t.color}">${initials(t.name)}</div>${t.name}</div>`).join('')}</div>
+  <p class="muted" style="font-size:13px; color:var(--muted); line-height:1.5; margin:4px">En la versión real cada técnico entra con su usuario y solo ve sus trabajos.</p></div>`;
+}
+
+function myJobs(date) { return S.jobs.filter((j) => j.techId === techId && j.date === date).sort((a, b) => a.time.localeCompare(b.time)); }
+
+function jobCard(j) {
+  const c = client(j.clientId);
+  const cls = j.status === 'completado' ? 'done' : j.status === 'en_curso' ? 'prog' : '';
+  const chip = j.status === 'completado' ? '<span class="chip green">Completado</span>' : j.status === 'en_curso' ? '<span class="chip gold">En curso</span>' : '<span class="chip gray">Pendiente</span>';
+  return `<div class="jc ${cls}" data-a="open" data-id="${j.id}"><div class="stripe"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center"><span class="time">${j.time}</span>${chip}</div>
+    <b style="color:var(--navy)">${esc(c.name)}${j.memberId ? ' <span class="chip sky">Miembro</span>' : ''}</b>
+    <div class="addr">${esc(c.address)}</div><div class="svcs">${svcList(j.services)}</div></div>`;
+}
+
+function vToday() {
+  const T = H.today();
+  const jobs = myJobs(T);
+  const done = jobs.filter((j) => j.status === 'completado');
+  const tomorrow = myJobs(H.addDays(T, 1));
+  return `${appbar('Hola, ' + tech(techId).name.split(' ')[0], fmtDate(T, { weekday: 'long', day: 'numeric', month: 'long' }))}
+  <div class="scroll">
+    <div class="stats"><div class="stat"><b>${jobs.length}</b><span>Trabajos hoy</span></div><div class="stat"><b>${done.length}</b><span>Cerrados</span></div><div class="stat"><b>${usd(done.reduce((s, j) => s + j.amount, 0))}</b><span>Cobrado</span></div></div>
+    ${window.matchMedia('(display-mode: standalone)').matches ? '' : '<div class="install">📲 <span>Instálala: en el celular, menú del navegador → <b>Agregar a pantalla de inicio</b>.</span></div>'}
+    <div class="sec">Agenda de hoy</div>
+    ${jobs.map(jobCard).join('') || '<div class="panel" style="text-align:center; color:var(--muted)">No tienes trabajos hoy.</div>'}
+    ${tomorrow.length ? `<div class="sec">Mañana</div>${tomorrow.map(jobCard).join('')}` : ''}
+  </div>${tabbar()}`;
+}
+
+function vSummary() {
+  const T = H.today();
+  const done = myJobs(T).filter((j) => j.status === 'completado');
+  const by = {}; done.forEach((j) => { if (j.amount) by[j.method] = (by[j.method] || 0) + j.amount; });
+  const week = S.jobs.filter((j) => j.techId === techId && j.status === 'completado' && j.date > H.addDays(T, -7));
+  return `${appbar('Mi resumen', 'Lo que entró hoy')}
+  <div class="scroll">
+    <div class="panel"><h3>Hoy <span class="chip green">${done.length} trabajos</span></h3>
+      ${done.map((j) => `<div class="line"><span>${esc(client(j.clientId).name)}<br><small style="color:var(--muted)">${svcList(j.services)}</small></span><b>${j.amount ? usd(j.amount) : 'Membresía'}</b></div>`).join('') || '<span style="color:var(--muted); font-size:14px">Aún no has cerrado trabajos hoy.</span>'}
+      <div class="total"><span>Total</span><span>${usd(done.reduce((s, j) => s + j.amount, 0))}</span></div>
+      ${Object.entries(by).map(([m, v]) => `<div class="line" style="font-size:13px; color:var(--muted)"><span>${m}</span><span>${usd(v)}</span></div>`).join('')}
+    </div>
+    <div class="note">No tienes que mandarle nada a David por WhatsApp: este resumen ya está en la plataforma y en el reporte para la contadora.</div>
+    <div class="panel"><h3>Últimos 7 días</h3><div class="line"><span>Trabajos cerrados</span><b>${week.length}</b></div><div class="line"><span>Fotos subidas</span><b>${week.reduce((s, j) => s + j.before.length + j.after.length, 0)}</b></div></div>
+  </div>${tabbar()}`;
+}
+
+function newDraft(j) {
+  return { before: [...j.before], after: [...j.after], services: [...j.services], extra: [], method: j.memberId ? 'Membresía' : '', notes: '' };
+}
+function draftTotal(j, d) {
+  const m = j.memberId ? S.members.find((x) => x.id === j.memberId) : S.members.find((x) => x.clientId === j.clientId && x.status === 'activa');
+  const disc = m ? PLANS[m.plan].discount : 0;
+  const base = j.memberId ? 0 : d.services.reduce((s, id) => s + (id === 'roof' && j.amount && j.services.length === 1 ? j.amount : svc(id).price), 0);
+  const extras = d.extra.reduce((s, id) => s + svc(id).price * (1 - disc / 100), 0);
+  return { total: Math.round(base + extras), disc, m };
+}
+
+function vJob() {
+  const j = S.jobs.find((x) => x.id === ui.jobId);
+  if (!j) { ui.screen = 'today'; return vToday(); }
+  const c = client(j.clientId);
+  const d = ui.draft;
+  const { total, disc, m } = draftTotal(j, d);
+  const started = j.status !== 'programado';
+  const closed = j.status === 'completado';
+  const photoBlock = (key, label) => `<div class="panel"><h3>Fotos de ${label} <span class="chip ${d[key].length ? 'green' : 'gray'}">${d[key].length}</span></h3>
+    <div class="photos">${d[key].map((p) => `<img src="${H.photoSrc(p)}" alt="">`).join('')}${closed ? '' : `<div class="add" data-a="photo" data-k="${key}"><div><span>＋</span>Tomar foto</div></div>`}</div>
+    ${closed ? '' : `<button class="sample" data-a="sample" data-k="${key}">Usar foto de ejemplo (para la demo en computador)</button>`}</div>`;
+  return `${appbar(esc(c.name), `${j.time} · ${svcList(j.services)}`, true)}
+  <div class="scroll">
+    <div class="panel">
+      <div style="font-size:14px; line-height:1.5">${esc(c.address)}<br><span style="color:var(--muted)">${esc(c.phone)}</span></div>
+      ${j.memberId ? `<span class="chip sky" style="justify-self:start">Visita incluida en membresía ${m ? PLANS[m.plan].name : ''}</span>` : m ? `<span class="chip sky" style="justify-self:start">Miembro ${PLANS[m.plan].name} · ${disc}% en extras</span>` : ''}
+      <div class="actions"><a class="btn btn-ghost btn-sm" href="tel:${esc(c.phone)}">📞 Llamar</a><a class="btn btn-ghost btn-sm" target="_blank" href="https://maps.google.com/?q=${encodeURIComponent(c.address)}">📍 Cómo llegar</a></div>
+      ${j.notes ? `<div class="note">${esc(j.notes)}</div>` : ''}
+    </div>
+    ${!started ? `<button class="btn btn-gold big" data-a="start">Iniciar trabajo</button>` : ''}
+    ${started ? photoBlock('before', 'antes') + photoBlock('after', 'después') : ''}
+    ${started && !closed ? `
+    <div class="panel"><h3>Servicio realizado</h3>
+      <div class="lines">${j.services.map((id) => `<div class="line"><label><input type="checkbox" data-a="svc" data-id="${id}" ${d.services.includes(id) ? 'checked' : ''}>${svc(id).es}</label><span>${j.memberId ? 'Incluido' : usd(id === 'roof' && j.services.length === 1 ? j.amount : svc(id).price)}</span></div>`).join('')}
+      ${d.extra.map((id, i) => `<div class="line"><label><input type="checkbox" checked data-a="rmextra" data-i="${i}">${svc(id).es} <span class="chip gold">Extra</span></label><span>${usd(svc(id).price * (1 - disc / 100))}</span></div>`).join('')}</div>
+      <select class="input" data-a="extra"><option value="">＋ Agregar servicio extra (upsell)${disc ? ` · ${disc}% miembro` : ''}</option>${SERVICES.filter((s) => !j.services.includes(s.id)).map((s) => `<option value="${s.id}">${s.es} · ${usd(s.price * (1 - disc / 100))}</option>`).join('')}</select>
+      <div class="total"><span>Cobrado</span><span>${usd(total)}</span></div>
+    </div>
+    ${total > 0 ? `<div class="panel"><h3>Medio de pago</h3><div class="methods">${PAY_METHODS.map((pm) => `<button data-a="method" data-v="${pm}" class="${d.method === pm ? 'on' : ''}">${pm}</button>`).join('')}</div></div>` : ''}
+    <div class="panel"><h3>Notas</h3><textarea class="input" rows="2" data-a="notes" placeholder="Opcional: algo que David deba saber">${esc(d.notes)}</textarea></div>
+    <button class="btn btn-navy big" data-a="finish">Finalizar y enviar</button>` : ''}
+    ${closed ? `<div class="panel"><h3>Cerrado <span class="chip green">${j.completedAt ? j.completedAt.slice(11, 16) : ''}</span></h3><div class="line"><span>Cobrado</span><b>${j.amount ? usd(j.amount) + ' · ' + j.method : 'Incluido en membresía'}</b></div></div>` : ''}
+  </div>`;
+}
+
+function vDone() {
+  const j = S.jobs.find((x) => x.id === ui.jobId);
+  if (!j) { ui.screen = 'today'; return vToday(); }
+  return `${appbar('Trabajo cerrado', '')}
+  <div class="scroll"><div class="success"><div class="ck">✓</div><h2 style="color:var(--navy)">¡Listo!</h2>
+  <p style="color:var(--muted); line-height:1.6; margin:0">${esc(client(j.clientId).name)} · ${j.amount ? usd(j.amount) + ' · ' + j.method : 'visita de membresía'}<br>David ya lo ve en la plataforma, con las fotos y el cobro. Nadie tiene que escribirlo en la noche.</p>
+  <button class="btn btn-navy big" data-a="tab" data-v="today">Volver a mi agenda</button></div></div>`;
+}
+
+// ---------- actions ----------
+function logEvent(text, kind) { DB.update(() => {}, { kind, text }); S = DB.load(); }
+
+document.addEventListener('click', async (e) => {
+  const t = e.target.closest('[data-a]'); if (!t) return;
+  const a = t.dataset.a;
+  const j = S.jobs.find((x) => x.id === ui.jobId);
+  if (a === 'login') { techId = t.dataset.id; try { localStorage.setItem(TECH_KEY, techId); } catch (er) {} ui.screen = 'today'; return render(); }
+  if (a === 'logout') { if (confirm('¿Cambiar de técnico?')) { techId = null; try { localStorage.removeItem(TECH_KEY); } catch (er) {} render(); } return; }
+  if (a === 'tab') { ui.screen = t.dataset.v; return render(); }
+  if (a === 'back') { ui.screen = 'today'; return render(); }
+  if (a === 'open') { ui.jobId = t.dataset.id; ui.draft = newDraft(S.jobs.find((x) => x.id === ui.jobId)); ui.screen = 'job'; render(); document.querySelector('.scroll').scrollTop = 0; return; }
+  if (a === 'start') {
+    DB.update((s) => { s.jobs.find((x) => x.id === j.id).status = 'en_curso'; }, { kind: 'job', text: `${tech(techId).name.split(' ')[0]} llegó e inició el trabajo de ${client(j.clientId).name}` });
+    S = DB.load(); toast('Trabajo iniciado. Toma las fotos de antes.'); return render();
+  }
+  if (a === 'photo') { ui.photoTarget = t.dataset.k; document.getElementById('cam').click(); return; }
+  if (a === 'sample') { ui.photoTarget = t.dataset.k; ui.draft[t.dataset.k].push(`ph:${t.dataset.k === 'after' ? 'after' : 'before'}:${Math.floor(Math.random() * 900) + 1}`); savePhotos(); return; }
+  if (a === 'method') { ui.draft.method = t.dataset.v; return render(); }
+  if (a === 'rmextra') { ui.draft.extra.splice(Number(t.dataset.i), 1); return render(); }
+  if (a === 'finish') return finish(j);
+});
+document.addEventListener('change', (e) => {
+  const t = e.target, a = t.dataset.a;
+  if (a === 'svc') { const id = t.dataset.id; ui.draft.services = t.checked ? [...ui.draft.services, id] : ui.draft.services.filter((x) => x !== id); render(); }
+  if (a === 'extra' && t.value) { ui.draft.extra.push(t.value); render(); }
+  if (a === 'notes') ui.draft.notes = t.value;
+});
+document.getElementById('cam').addEventListener('change', async (e) => {
+  const files = [...e.target.files]; e.target.value = '';
+  toast('Subiendo foto…');
+  for (const f of files) { try { ui.draft[ui.photoTarget].push(await DB.uploadPhoto(f)); } catch (er) { toast('No se pudo leer la foto.'); } }
+  savePhotos();
+});
+
+// Photos sync as soon as they're taken, so David sees them before the job closes.
+function savePhotos() {
+  const j = S.jobs.find((x) => x.id === ui.jobId);
+  DB.update((s) => { const x = s.jobs.find((y) => y.id === j.id); x.before = ui.draft.before; x.after = ui.draft.after; }, { kind: 'photo', text: `${tech(techId).name.split(' ')[0]} subió fotos de ${ui.photoTarget === 'after' ? 'después' : 'antes'} · ${client(j.clientId).name}` });
+  S = DB.load();
+    render();
+}
+
+function finish(j) {
+  const d = ui.draft;
+  const { total } = draftTotal(j, d);
+  if (!d.after.length) return toast('Falta al menos una foto de después.');
+  if (total > 0 && (!d.method || d.method === 'Membresía')) return toast('Elige el medio de pago.');
+  const now = new Date();
+  const stamp = H.today() + 'T' + now.toTimeString().slice(0, 5);
+  const services = [...d.services, ...d.extra];
+  DB.update((s) => {
+    const x = s.jobs.find((y) => y.id === j.id);
+    Object.assign(x, { status: 'completado', services, amount: total, method: total ? d.method : 'Membresía', before: d.before, after: d.after, completedAt: stamp, notes: [x.notes, d.notes].filter(Boolean).join(' · ') });
+    if (total) s.payments.unshift({ id: H.uid('p'), date: H.today(), type: 'trabajo', amount: total, method: d.method, clientId: j.clientId, ref: j.id });
+    if (j.memberId) { const v = s.members.find((m) => m.id === j.memberId)?.visits.find((v) => v.jobId === j.id); if (v) v.status = 'hecha'; }
+  }, { kind: 'job', text: `${tech(techId).name.split(' ')[0]} cerró el trabajo de ${client(j.clientId).name} · ${total ? usd(total) + ' · ' + d.method : 'visita de membresía'}${d.extra.length ? ' · con upsell' : ''}` });
+  S = DB.load();
+  ui.screen = 'done'; render();
+}
+
+DB.onChange((ns) => { S = ns; if (ui.screen !== 'job') render(); });
+window.addEventListener('online', render); window.addEventListener('offline', render);
+if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
+render();
+DB.ready().then(() => { S = DB.load(); if (ui.screen !== 'job') render(); });
+</script>
+</body>
+</html>

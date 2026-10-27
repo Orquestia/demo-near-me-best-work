@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Best Work Membership · Near Me Best Work (demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css?v=2">
+<style>
+  body { background: #fff; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+  .demo-ribbon { background: var(--gold); color: var(--navy); text-align: center; font-size: 12.5px; font-weight: 600; padding: 6px 12px; }
+
+  header.top { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  header.top .wrap { display: flex; align-items: center; gap: 24px; height: 72px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo img { height: 44px; width: auto; }
+  .logo .fallback { font-family: var(--display); font-weight: 800; color: var(--navy); font-size: 20px; }
+  nav.main { display: flex; gap: 22px; margin-left: auto; font-weight: 500; font-size: 15px; }
+  nav.main a { text-decoration: none; color: var(--ink); }
+  nav.main a:hover { color: var(--blue); }
+  @media (max-width: 860px) { nav.main { display: none; } header.top .btn-gold { margin-left: auto; } }
+
+  .hero { position: relative; color: #fff; background: linear-gradient(100deg, rgba(27,36,64,.95) 0%, rgba(27,36,64,.82) 45%, rgba(26,61,110,.45) 100%), url('https://nearmebestwork.com/wp-content/uploads/2026/05/roof-wash-orlando-aerial-comparison.jpg') center/cover, var(--navy); }
+  .hero .wrap { padding: 88px 20px 96px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 48px; align-items: center; }
+  .eyebrow { display: inline-flex; gap: 8px; align-items: center; background: rgba(212,167,44,.16); color: var(--gold); border: 1px solid rgba(212,167,44,.4); padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; letter-spacing: .02em; }
+  .hero h1 { font-size: clamp(34px, 5vw, 56px); font-weight: 800; margin: 18px 0 16px; letter-spacing: -.02em; }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero p.lead { font-size: 19px; line-height: 1.55; color: #dbe3f0; max-width: 560px; margin: 0 0 28px; }
+  .hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero .btn { padding: 15px 24px; font-size: 16px; }
+  .hero .btn-ghost { color: #fff; border-color: rgba(255,255,255,.35); }
+  .hero .btn-ghost:hover { background: rgba(255,255,255,.08); }
+  .hero-card { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 18px; padding: 24px; backdrop-filter: blur(6px); }
+  .hero-card .from { font-size: 14px; color: #cbd5e1; }
+  .hero-card .big { font-family: var(--display); font-size: 54px; font-weight: 800; color: #fff; line-height: 1; margin: 6px 0; }
+  .hero-card .big small { font-size: 18px; font-weight: 600; color: #cbd5e1; }
+  .hero-card ul { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 10px; font-size: 15px; }
+  .hero-card li { display: flex; gap: 10px; }
+  .check { flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--gold); color: var(--navy); display: grid; place-items: center; font-size: 12px; font-weight: 800; margin-top: 1px; }
+  @media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; padding: 56px 20px 64px; } }
+
+  .trust { background: var(--navy); color: #fff; }
+  .trust .wrap { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 16px 28px; padding: 18px 20px; font-weight: 600; font-size: 14.5px; }
+  .trust span { display: flex; align-items: center; gap: 8px; }
+  .trust b { color: var(--gold); }
+
+  section.block { padding: 84px 0; }
+  section.alt { background: var(--bg); }
+  .section-head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
+  .section-head .kicker { color: var(--gold); font-weight: 700; letter-spacing: .12em; font-size: 13px; text-transform: uppercase; }
+  .section-head h2 { font-size: clamp(28px, 3.6vw, 40px); color: var(--navy); margin: 10px 0 12px; letter-spacing: -.01em; }
+  .section-head p { color: var(--muted); font-size: 17px; line-height: 1.6; margin: 0; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .step { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
+  .step .n { width: 40px; height: 40px; border-radius: 12px; background: var(--navy); color: var(--gold); display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 18px; margin-bottom: 16px; }
+  .step h3 { font-size: 19px; color: var(--navy); margin-bottom: 8px; }
+  .step p { color: var(--muted); margin: 0; line-height: 1.55; }
+  @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+
+  /* Plan finder */
+  .finder { background: var(--navy); color: #fff; border-radius: 22px; padding: 34px; display: grid; gap: 18px; box-shadow: var(--shadow); }
+  .finder h3 { font-size: 24px; }
+  .finder p { margin: 0; color: #cbd5e1; }
+  .finder form { display: flex; gap: 10px; }
+  .finder .input { font-size: 17px; padding: 15px 16px; }
+  .finder .btn { padding: 15px 22px; font-size: 16px; }
+  .examples { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: #94a3b8; align-items: center; }
+  .examples button { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); color: #e2e8f0; border-radius: 999px; padding: 5px 11px; cursor: pointer; font-size: 12.5px; }
+  .examples button:hover { border-color: var(--gold); }
+  @media (max-width: 640px) { .finder form { flex-direction: column; } .finder { padding: 24px; } }
+
+  .lookup { scroll-margin-top: 120px; display: none;background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 16px 18px; }
+  .lookup.on { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .lookup .spinner { width: 22px; height: 22px; border: 3px solid rgba(255,255,255,.2); border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .lookup .stat { display: grid; gap: 2px; }
+  .lookup .stat small { color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+  .lookup .stat b { font-family: var(--display); font-size: 20px; }
+  .band-pill { background: var(--gold); color: var(--navy); font-family: var(--display); font-weight: 800; border-radius: 10px; padding: 8px 14px; font-size: 20px; }
+  .src { color: #94a3b8; font-size: 12.5px; flex-basis: 100%; }
+
+  .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin: 40px 0 22px; }
+  .bands { display: flex; gap: 6px; background: var(--bg); padding: 5px; border-radius: 12px; border: 1px solid var(--line); }
+  .bands button, .billing button { border: 0; background: transparent; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; color: var(--muted); font-size: 14px; }
+  .bands button.on, .billing button.on { background: #fff; color: var(--navy); box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  .billing { display: flex; gap: 6px; background: var(--bg); padding: 5px; border-radius: 12px; border: 1px solid var(--line); }
+  .billing .save { color: var(--green); font-size: 12px; margin-left: 4px; }
+  .band-label { font-size: 14px; color: var(--muted); }
+  .band-label b { color: var(--navy); }
+
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+  .plan { position: relative; background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 16px; transition: box-shadow .2s, transform .2s; }
+  .plan:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+  .plan.popular { border: 2px solid var(--gold); box-shadow: 0 18px 40px rgba(212,167,44,.18); }
+  .plan .ribbon { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--navy); font-weight: 700; font-size: 12px; padding: 5px 12px; border-radius: 999px; letter-spacing: .04em; text-transform: uppercase; }
+  .plan h3 { font-size: 24px; color: var(--navy); }
+  .plan .blurb { color: var(--muted); margin: 4px 0 0; font-size: 15px; }
+  .price { display: flex; align-items: baseline; gap: 6px; }
+  .price .amt { font-family: var(--display); font-weight: 800; font-size: 46px; color: var(--navy); letter-spacing: -.02em; }
+  .price .per { color: var(--muted); font-weight: 600; }
+  .price-note { font-size: 13.5px; color: var(--muted); min-height: 38px; line-height: 1.45; }
+  .price-note b { color: var(--green); }
+  .tbd { display: inline-block; border: 1px dashed var(--gold); background: #fffaf0; color: #7a5a06; padding: 6px 10px; border-radius: 8px; font-size: 12.5px; font-weight: 600; }
+  .plan ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 14.5px; flex: 1; }
+  .plan li { display: flex; gap: 10px; line-height: 1.4; }
+  .plan li .check { background: #E3F5DE; color: #2f7a1f; }
+  .plan .btn { width: 100%; padding: 14px; font-size: 16px; }
+  @media (max-width: 960px) { .plans { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; } }
+
+  .xl-box { display: none; background: #fff; border: 2px dashed var(--gold); border-radius: 18px; padding: 28px; text-align: center; }
+  .xl-box.on { display: block; }
+  .xl-box h3 { color: var(--navy); font-size: 22px; margin-bottom: 8px; }
+
+  table.compare { width: 100%; border-collapse: collapse; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); font-size: 15px; }
+  table.compare th, table.compare td { padding: 14px 16px; text-align: center; border-bottom: 1px solid var(--line); }
+  table.compare th:first-child, table.compare td:first-child { text-align: left; }
+  table.compare thead th { background: var(--navy); color: #fff; font-family: var(--display); font-weight: 600; }
+  table.compare thead th.gold { color: var(--gold); }
+  table.compare tbody tr:nth-child(even) { background: #fafbfc; }
+  .yes { color: var(--green); font-weight: 800; }
+  .no { color: #cbd5e1; }
+  .compare-wrap { overflow-x: auto; }
+
+  .faq { max-width: 820px; margin: 0 auto; display: grid; gap: 10px; }
+  details { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 4px 20px; }
+  details summary { cursor: pointer; padding: 14px 0; font-weight: 600; color: var(--navy); list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  details summary::after { content: '+'; color: var(--gold); font-size: 22px; line-height: 1; }
+  details[open] summary::after { content: '–'; }
+  details p { margin: 0 0 16px; color: var(--muted); line-height: 1.6; }
+
+  .services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .svc { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .svc b { color: var(--navy); font-family: var(--display); font-weight: 600; }
+  .svc span { color: var(--muted); font-size: 14px; }
+  .svc .p { font-family: var(--display); font-weight: 700; color: var(--blue); font-size: 18px; white-space: nowrap; }
+  @media (max-width: 860px) { .services { grid-template-columns: 1fr; } }
+
+  .estimate { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .estimate form { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; gap: 14px; box-shadow: var(--shadow); }
+  .estimate .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 860px) { .estimate { grid-template-columns: 1fr; } .estimate .row { grid-template-columns: 1fr; } }
+
+  footer { background: var(--navy); color: #cbd5e1; padding: 40px 0 90px; font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  footer b { color: #fff; font-family: var(--display); }
+
+  /* Checkout */
+  .modal-bg { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 200; display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; }
+  .modal-bg.on { display: flex; }
+  .modal { background: #fff; border-radius: 20px; width: 100%; max-width: 860px; display: grid; grid-template-columns: 1.25fr .75fr; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.3); animation: tin .25s ease-out; }
+  .modal .main { padding: 30px; display: grid; gap: 16px; align-content: start; }
+  .modal .side { background: var(--bg); padding: 30px; border-left: 1px solid var(--line); display: grid; gap: 12px; align-content: start; }
+  .modal h3 { color: var(--navy); font-size: 22px; }
+  .modal .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stepper { display: flex; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .stepper span { padding: 4px 10px; border-radius: 999px; background: var(--bg); }
+  .stepper span.on { background: var(--navy); color: #fff; }
+  .sum-line { display: flex; justify-content: space-between; font-size: 14.5px; gap: 10px; }
+  .sum-line.total { font-weight: 700; font-size: 17px; color: var(--navy); border-top: 1px solid var(--line); padding-top: 12px; }
+  .square-box { border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 12px; background: #fcfcfd; }
+  .square-box .hdr { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); }
+  .sim { font-size: 11.5px; font-weight: 700; color: #7a5a06; background: var(--gold-soft); border-radius: 6px; padding: 3px 8px; }
+  .terms { display: flex; gap: 10px; font-size: 13.5px; color: var(--muted); line-height: 1.5; align-items: flex-start; }
+  .terms input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--navy); }
+  .close-x { position: absolute; right: 18px; top: 14px; background: none; border: 0; font-size: 26px; cursor: pointer; color: var(--muted); }
+  .done { text-align: center; padding: 10px 0; display: grid; gap: 12px; justify-items: center; }
+  .done .big-check { width: 64px; height: 64px; border-radius: 50%; background: #E3F5DE; color: #2f7a1f; display: grid; place-items: center; font-size: 32px; font-weight: 800; }
+  .visit-list { text-align: left; width: 100%; display: grid; gap: 8px; }
+  .visit-list div { display: flex; justify-content: space-between; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: 14px; }
+  @media (max-width: 760px) { .modal { grid-template-columns: 1fr; } .modal .side { border-left: 0; border-top: 1px solid var(--line); } .modal .row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="demo-ribbon">Demo by Orquestia · Landing page mock-up with Best Work Membership sign-up. Prices are the suggested plan, not yet published.</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#"><img src="https://nearmebestwork.com/wp-content/uploads/2026/05/logo.png" alt="Near Me Best Work" onerror="this.outerHTML='<span class=fallback>Near Me Best Work</span>'"></a>
+    <nav class="main">
+      <a href="#how">How it works</a>
+      <a href="#plans">Membership</a>
+      <a href="#services">Services</a>
+      <a href="#faq">Plan rules</a>
+      <a href="#estimate">Free estimate</a>
+    </nav>
+    <a class="btn btn-gold" href="tel:4078005400">Call (407) 800-5400</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">NEW · Best Work Membership</span>
+      <h1>Your home, <em>spotless</em><br>all year long.</h1>
+      <p class="lead">One simple monthly plan and we keep your house, driveway and roof clean on schedule. No calls, no reminders, no surprise quotes. Just Orlando's trusted pressure washing team, on autopilot.</p>
+      <div class="ctas">
+        <a class="btn btn-gold" href="#plans">Find my plan</a>
+        <a class="btn btn-ghost" href="#estimate">Get a free estimate</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="from">Plans from</div>
+      <div class="big">$29<small>/month</small></div>
+      <ul>
+        <li><span class="check">✓</span>House soft wash and driveway cleanings included</li>
+        <li><span class="check">✓</span>Priced by your home's size, from county records</li>
+        <li><span class="check">✓</span>Pay monthly or save with the annual plan</li>
+        <li><span class="check">✓</span>Best Work Promise on every visit</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="trust"><div class="wrap">
+  <span><b>★★★★★</b> 343 Five-Star Reviews</span>
+  <span>Platinum Top Pro on Thumbtack</span>
+  <span>Fully Insured</span>
+  <span>Family-Owned</span>
+  <span>Hablamos Español</span>
+</div></div>
+
+<section class="block" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">How it works</div>
+      <h2>Three steps. Zero measuring.</h2>
+      <p>We size your home from public property records, so your price is fair and instant.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Enter your address</h3><p>We look up your home's living area in the county property record, the same data our instant estimate uses.</p></div>
+      <div class="step"><div class="n">2</div><h3>Pick your plan</h3><p>Base, Gold or Platinum, priced for your home's size band. Pay monthly or the full year up front.</p></div>
+      <div class="step"><div class="n">3</div><h3>We schedule everything</h3><p>Your included services go on the calendar with you. We show up, clean, and send before and after photos.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="plans">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Best Work Membership</div>
+      <h2>Find your price in 10 seconds</h2>
+      <p>Your plan price depends on your home's size. Type your address and we'll do the rest.</p>
+    </div>
+
+    <div class="finder">
+      <div>
+        <h3>What's your home address?</h3>
+        <p>Central Florida homes, 1 or 2 stories.</p>
+      </div>
+      <form id="finderForm" autocomplete="off">
+        <input class="input" id="addr" placeholder="e.g. 2140 Aloma Ave, Winter Park, FL" required>
+        <button class="btn btn-gold" type="submit">Find my price</button>
+      </form>
+      <div class="examples">Try:
+        <button type="button" data-a="1420 Lake Baldwin Ln, Orlando, FL 32814">Lake Baldwin (S)</button>
+        <button type="button" data-a="2140 Aloma Ave, Winter Park, FL 32789">Winter Park (M)</button>
+        <button type="button" data-a="7801 Dr Phillips Blvd, Orlando, FL 32819">Dr Phillips (L)</button>
+        <button type="button" data-a="11950 Windermere Rd, Windermere, FL 34786">Windermere (XL)</button>
+      </div>
+      <div class="lookup" id="lookup"></div>
+    </div>
+
+    <div class="toolbar">
+      <div class="band-label" id="bandLabel">Showing prices for band <b>M</b> · 1,501 – 2,500 sq ft</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <div class="bands" id="bands"></div>
+        <div class="billing" id="billing">
+          <button data-b="monthly" class="on">Monthly</button>
+          <button data-b="annual">Annual <span class="save">save up to $343</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="plans" id="plansGrid"></div>
+    <div class="xl-box" id="xlBox">
+      <h3>Your home is over 3,500 sq ft: let's give you a custom price</h3>
+      <p style="color:var(--muted); max-width:560px; margin:0 auto 18px">Larger homes get a personalized membership quote with a free estimate. David or our team will reach out within one business day.</p>
+      <a class="btn btn-navy" href="#estimate" id="xlCta">Request my custom quote</a>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Compare plans</div>
+      <h2>What's included every year</h2>
+    </div>
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead><tr><th>Included per year</th><th>Base</th><th class="gold">Gold ★</th><th>Platinum</th></tr></thead>
+        <tbody>
+          <tr><td>House Soft Wash</td><td>1</td><td>1</td><td>2</td></tr>
+          <tr><td>Driveway, sidewalk & entry cleaning</td><td>2</td><td>2</td><td>2</td></tr>
+          <tr><td>Roof & gutter visual inspection</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>Roof Soft Wash</td><td class="no">—</td><td>1</td><td>1</td></tr>
+          <tr><td>Pool deck or patio cleaning</td><td class="no">—</td><td>1</td><td>1</td></tr>
+          <tr><td>Fence Cleaning</td><td class="no">—</td><td class="no">—</td><td>1</td></tr>
+          <tr><td>Paver Sealing</td><td class="no">—</td><td class="no">—</td><td>1</td></tr>
+          <tr><td>Screen enclosure / pool cage cleaning</td><td class="no">—</td><td class="no">—</td><td>1</td></tr>
+          <tr><td>Discount on extra services</td><td>10%</td><td>15%</td><td>20%</td></tr>
+          <tr><td>Scheduling</td><td>Priority</td><td>High priority</td><td>Same week + check-up every 3 months</td></tr>
+          <tr><td>Value if bought separately</td><td>$447</td><td>$945</td><td>$1,642+</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Our services</div>
+      <h2>Prefer a one-time clean?</h2>
+      <p>Members get 10% to 20% off every one of these.</p>
+    </div>
+    <div class="services" id="svcGrid"></div>
+  </div>
+</section>
+
+<section class="block" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Clear rules</div>
+      <h2>How the membership works</h2>
+    </div>
+    <div class="faq">
+      <details open><summary>How long is the contract?</summary><p>12 months. Your price stays locked for the whole year.</p></details>
+      <details><summary>How do you know my home's size?</summary><p>We use the living area from the county property record for your address, the same data our instant estimate tool uses. You don't have to measure anything. Plans cover 1 and 2-story homes; homes outside the bands get a free custom estimate.</p></details>
+      <details><summary>What if my roof is bigger than average?</summary><p>The roof wash included in Gold and Platinum is calculated at $0.25 per square foot of roof. If your roof goes over the value included in your band, you only pay the difference.</p></details>
+      <details><summary>How do I schedule my included services?</summary><p>We schedule each included service with you. Services not scheduled within your membership year don't roll over to the next year.</p></details>
+      <details><summary>How am I billed?</summary><p>Monthly plans are charged automatically to your card. You can also pay the full year up front at the annual price.</p></details>
+      <details><summary>Can I cancel?</summary><p>Yes. If you cancel before 12 months, you pay the difference between what you've paid and the value of the services you've already received.</p></details>
+      <details><summary>Can I transfer my membership?</summary><p>Each membership covers one property and can't be transferred.</p></details>
+      <details><summary>What's the Best Work Promise?</summary><p>On every visit: if you're not happy, we come back and make it right.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="estimate">
+  <div class="wrap estimate">
+    <div>
+      <div class="section-head" style="text-align:left; margin:0 0 20px">
+        <div class="kicker">Free estimate</div>
+        <h2>Not ready for a plan?</h2>
+        <p>Tell us what you need and we'll send a quote, usually the same day. Prefer to talk? Call or text <b>(407) 800-5400</b>. Hablamos español.</p>
+      </div>
+    </div>
+    <form id="estimateForm">
+      <div class="row">
+        <label class="field">Name<input class="input" name="name" required></label>
+        <label class="field">Phone<input class="input" name="phone" required></label>
+      </div>
+      <label class="field">Address<input class="input" name="address"></label>
+      <label class="field">Service<select class="input" name="service" id="estSvc"></select></label>
+      <label class="field">Details<textarea class="input" name="notes" rows="3" placeholder="Size, timing, anything we should know"></textarea></label>
+      <button class="btn btn-navy" type="submit">Request free estimate</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><b>Near Me Best Work</b><br>Pressure Washing & Property Improvements · Orlando, Florida</div>
+    <div>(407) 800-5400 · nearmebestwork.com<br>Mock-up by Orquestia for review. Not a live page.</div>
+  </div>
+</footer>
+
+<!-- Checkout -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" style="position:relative">
+    <button class="close-x" id="closeModal" aria-label="Close">×</button>
+    <div class="main" id="modalMain"></div>
+    <div class="side" id="modalSide"></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+<nav class="demo-nav"><span class="tag">Demo</span><a class="on" href="index.html">Landing</a><a href="admin.html">Plataforma</a><a href="app.html">App de campo</a></nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js?v=3"></script>
+<script src="assets/store.js?v=3"></script>
+<script>
+const { PLANS, BANDS, SERVICES, helpers: H } = DB;
+const state = { band: 'M', billing: 'monthly', address: '', sqft: null, plan: null };
+
+function toast(msg) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.getElementById('toasts').appendChild(t); setTimeout(() => t.remove(), 4200);
+}
+
+// ----- band + billing toggles -----
+const bandsEl = document.getElementById('bands');
+bandsEl.innerHTML = ['S', 'M', 'L', 'XL'].map((b) => `<button data-band="${b}">${b}</button>`).join('');
+bandsEl.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { state.band = b.dataset.band; renderPlans(); } });
+document.getElementById('billing').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { state.billing = b.dataset.b; renderPlans(); } });
+
+function renderPlans() {
+  bandsEl.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.band === state.band));
+  document.querySelectorAll('#billing button').forEach((b) => b.classList.toggle('on', b.dataset.b === state.billing));
+  const band = BANDS.find((b) => b.id === state.band);
+  document.getElementById('bandLabel').innerHTML = `Showing prices for band <b>${band.id}</b> · ${band.label}${state.sqft ? ` · your home: <b>${state.sqft.toLocaleString('en-US')} sq ft</b>` : ''}`;
+  const xl = state.band === 'XL';
+  document.getElementById('xlBox').classList.toggle('on', xl);
+  const grid = document.getElementById('plansGrid');
+  grid.style.display = xl ? 'none' : '';
+  if (xl) return;
+  grid.innerHTML = Object.values(PLANS).map((p) => {
+    const monthly = p.monthly[state.band];
+    const annual = p.annual[state.band];
+    let priceHtml, note;
+    if (state.billing === 'annual' && annual) {
+      priceHtml = `<span class="amt">${H.usd(annual)}</span><span class="per">/year</span>`;
+      note = `Value if bought separately: ${H.usd(p.separate)}${p.separateNote ? ' ' + p.separateNote : ''}.<br><b>You save ${H.usd(p.separate - annual)}${p.id === 'platinum' ? '+' : ''} per year.</b>`;
+    } else if (state.billing === 'annual') {
+      priceHtml = `<span class="amt">${H.usd(monthly)}</span><span class="per">/month</span>`;
+      note = `<span class="tbd">Annual price for band ${state.band}: pending confirmation</span>`;
+    } else {
+      priceHtml = `<span class="amt">${H.usd(monthly)}</span><span class="per">/month</span>`;
+      note = `12-month plan, charged monthly.${annual ? `<br>Or ${H.usd(annual)} paid yearly: <b>save ${H.usd(p.separate - annual)}${p.id === 'platinum' ? '+' : ''}</b> vs. separate prices.` : ''}`;
+    }
+    return `<div class="plan ${p.popular ? 'popular' : ''}">
+      ${p.popular ? '<div class="ribbon">Most popular</div>' : ''}
+      <div><h3>${p.name}</h3><p class="blurb">${p.blurb}</p></div>
+      <div class="price">${priceHtml}</div>
+      <div class="price-note">${note}</div>
+      <ul>${p.includes.map((i) => `<li><span class="check">✓</span>${i}</li>`).join('')}</ul>
+      <button class="btn ${p.popular ? 'btn-gold' : 'btn-navy'}" data-plan="${p.id}">Choose ${p.name}</button>
+    </div>`;
+  }).join('');
+}
+document.getElementById('plansGrid').addEventListener('click', (e) => { const b = e.target.closest('[data-plan]'); if (b) openCheckout(b.dataset.plan); });
+
+// ----- address lookup -----
+const addrEl = document.getElementById('addr');
+document.querySelectorAll('.examples button').forEach((b) => b.addEventListener('click', () => { addrEl.value = b.dataset.a; document.getElementById('finderForm').requestSubmit(); }));
+document.getElementById('finderForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const lk = document.getElementById('lookup');
+  const address = addrEl.value.trim(); if (!address) return;
+  lk.className = 'lookup on';
+  lk.innerHTML = '<div class="spinner"></div><div>Looking up the county property record for this address…</div>';
+  setTimeout(() => {
+    const sqft = H.lookupAddress(address), band = H.bandFor(sqft);
+    Object.assign(state, { address, sqft, band });
+    lk.innerHTML = `<div class="stat"><small>Living area</small><b>${sqft.toLocaleString('en-US')} sq ft</b></div>
+      <div class="stat"><small>Your size band</small><span class="band-pill">${band}</span></div>
+      <div class="stat"><small>Starting at</small><b>${band === 'XL' ? 'Custom quote' : H.usd(PLANS.base.monthly[band]) + '/mo'}</b></div>
+      <div class="src">Source: county property appraiser record (simulated in this demo, the real build reuses the site's instant-estimate data).</div>`;
+    renderPlans();
+    lk.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 1100);
+});
+
+// ----- checkout -----
+const modalBg = document.getElementById('modalBg');
+document.getElementById('closeModal').onclick = () => modalBg.classList.remove('on');
+modalBg.addEventListener('click', (e) => { if (e.target === modalBg) modalBg.classList.remove('on'); });
+
+function chargeInfo() {
+  const p = PLANS[state.plan];
+  const annualOk = state.billing === 'annual' && p.annual[state.band];
+  const billing = annualOk ? 'annual' : 'monthly';
+  return { p, billing, amount: H.priceFor(p.id, state.band, billing) };
+}
+
+function renderSide() {
+  const { p, billing, amount } = chargeInfo();
+  document.getElementById('modalSide').innerHTML = `
+    <div class="chip gold" style="justify-self:start">${p.name} plan · band ${state.band}</div>
+    <h3 style="font-size:19px">Order summary</h3>
+    <div class="sum-line"><span>${p.name} membership</span><span>${H.usd(amount)}${billing === 'annual' ? '/yr' : '/mo'}</span></div>
+    <div class="sum-line"><span>Billing</span><span>${billing === 'annual' ? 'Annual, paid up front' : 'Monthly, automatic'}</span></div>
+    <div class="sum-line"><span>Contract</span><span>12 months, price locked</span></div>
+    ${state.sqft ? `<div class="sum-line"><span>Home size</span><span>${state.sqft.toLocaleString('en-US')} sq ft</span></div>` : ''}
+    <div class="sum-line total"><span>Due today</span><span>${H.usd(amount)}</span></div>
+    <div style="font-size:13px; color:var(--muted); line-height:1.5">${billing === 'monthly' ? `Then ${H.usd(amount)} every month for 12 months.` : `Covers 12 months. Separate value ${H.usd(p.separate)}.`}</div>
+    <div style="font-size:13px; color:var(--muted); line-height:1.5; margin-top:6px"><b style="color:var(--navy)">Included this year:</b><br>${p.includes.slice(0, 4).join('<br>')}</div>`;
+}
+
+function openCheckout(planId) {
+  state.plan = planId;
+  renderSide();
+  document.getElementById('modalMain').innerHTML = `
+    <div class="stepper"><span class="on">1 · Your info</span><span>2 · Payment</span><span>3 · Done</span></div>
+    <h3>Tell us about you and your home</h3>
+    <form id="ckInfo" style="display:grid; gap:12px">
+      <div class="row">
+        <label class="field">Full name<input class="input" name="name" required></label>
+        <label class="field">Phone<input class="input" name="phone" required placeholder="(407) 555-0100"></label>
+      </div>
+      <label class="field">Email<input class="input" name="email" type="email" required></label>
+      <label class="field">Property address<input class="input" name="address" required value="${H.esc(state.address)}"></label>
+      <label class="field">Home size band
+        <select class="input" name="band">${['S', 'M', 'L'].map((b) => `<option ${b === state.band ? 'selected' : ''} value="${b}">${b} · ${BANDS.find((x) => x.id === b).label}</option>`).join('')}</select>
+      </label>
+      <button class="btn btn-navy" type="submit">Continue to payment</button>
+    </form>`;
+  modalBg.classList.add('on');
+  const f = document.getElementById('ckInfo');
+  f.band.onchange = () => { state.band = f.band.value; renderSide(); renderPlans(); };
+  f.onsubmit = (e) => { e.preventDefault(); const d = Object.fromEntries(new FormData(f)); state.band = d.band; if (!state.sqft || H.bandFor(state.sqft) !== d.band) state.sqft = null; paymentStep(d); };
+}
+
+function paymentStep(info) {
+  const { p, billing, amount } = chargeInfo();
+  renderSide();
+  document.getElementById('modalMain').innerHTML = `
+    <div class="stepper"><span>1 · Your info</span><span class="on">2 · Payment</span><span>3 · Done</span></div>
+    <h3>Payment</h3>
+    <div class="square-box">
+      <div class="hdr"><span>Card payment processed by Square</span><span class="sim">SIMULATED · no real charge</span></div>
+      <label class="field">Card number<input class="input" value="•••• •••• •••• 4242" disabled></label>
+      <div class="row">
+        <label class="field">Expiry<input class="input" value="12 / 29" disabled></label>
+        <label class="field">ZIP<input class="input" value="32801" disabled></label>
+      </div>
+    </div>
+    <label class="terms"><input type="checkbox" id="agree">I agree to a 12-month membership at ${H.usd(amount)}${billing === 'annual' ? ' per year' : ' per month, charged automatically'}. If I cancel early, I pay the difference between what I've paid and the value of services received. One property, non-transferable.</label>
+    <button class="btn btn-gold" id="payBtn" disabled>${billing === 'annual' ? 'Pay ' + H.usd(amount) + ' and join' : 'Start membership · ' + H.usd(amount) + '/mo'}</button>`;
+  const agree = document.getElementById('agree'), btn = document.getElementById('payBtn');
+  agree.onchange = () => (btn.disabled = !agree.checked);
+  btn.onclick = () => {
+    btn.disabled = true; btn.textContent = 'Processing…';
+    setTimeout(() => finish(info, p, billing, amount), 1000);
+  };
+}
+
+function finish(info, p, billing, amount) {
+  const T = H.today();
+  const clientId = H.uid('c'), memberId = H.uid('m');
+  const visits = p.visits.map(([s, off]) => ({ id: H.uid('v'), svc: s, due: H.addDays(T, off), status: 'pendiente' }));
+  DB.update((s) => {
+    s.clients.unshift({ id: clientId, name: info.name, phone: info.phone, email: info.email, address: info.address, sqft: state.sqft || null, origin: 'Orgánico', createdAt: T });
+    s.members.unshift({ id: memberId, clientId, plan: p.id, band: state.band, billing, price: amount, start: T, status: 'activa', visits, isNew: true });
+    s.payments.unshift({ id: H.uid('p'), date: T, type: 'membresía', amount, method: 'Tarjeta (Square)', clientId, ref: memberId });
+  }, { kind: 'member', text: `Nueva membresía ${p.name} (banda ${state.band}) · ${info.name} · ${H.usd(amount)}${billing === 'annual' ? '/año' : '/mes'}` });
+  document.getElementById('modalMain').innerHTML = `
+    <div class="stepper"><span>1 · Your info</span><span>2 · Payment</span><span class="on">3 · Done</span></div>
+    <div class="done">
+      <div class="big-check">✓</div>
+      <h3>Welcome to ${p.name}, ${H.esc(info.name.split(' ')[0])}!</h3>
+      <p style="color:var(--muted); margin:0">We'll text you at ${H.esc(info.phone)} to confirm the dates for your first visits.</p>
+      <div class="visit-list">${visits.slice(0, 4).map((v) => `<div><span>${H.svc(v.svc).name}</span><b>${new Date(v.due + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</b></div>`).join('')}</div>
+      <button class="btn btn-navy" onclick="document.getElementById('modalBg').classList.remove('on')">Done</button>
+    </div>`;
+  toast(`Membership created. Open "Plataforma" to see ${info.name} land in the CRM.`);
+}
+
+// ----- services + estimate -----
+document.getElementById('svcGrid').innerHTML = SERVICES.map((s) => `<div class="svc"><div><b>${s.name}</b><br><span>${s.id === 'screen' ? 'Starting at' : 'From'}</span></div><div class="p">${H.usd(s.price)}</div></div>`).join('')
+  + '<div class="svc"><div><b>Roof Coating & Sealing</b><br><span>Metal & flat roofs</span></div><div class="p">Quote</div></div>'
+  + '<div class="svc"><div><b>Property Improvements</b><br><span>Painting, remodeling</span></div><div class="p">Quote</div></div>';
+document.getElementById('estSvc').innerHTML = SERVICES.map((s) => `<option value="${s.id}">${s.name}</option>`).join('') + '<option value="member-xl">Membership, home over 3,500 sq ft</option>';
+document.getElementById('xlCta').onclick = () => { document.getElementById('estSvc').value = 'member-xl'; };
+
+document.getElementById('estimateForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(e.target));
+  const services = d.service === 'member-xl' ? [] : [d.service];
+  const text = `Estimate request from website: ${d.service === 'member-xl' ? 'membership for home over 3,500 sq ft' : H.svc(d.service).name}${d.address ? ' at ' + d.address : ''}. ${d.notes || ''}`.trim();
+  DB.update((s) => {
+    s.leads.unshift({ id: H.uid('l'), name: d.name, phone: d.phone, channel: 'Web', origin: 'Orgánico', status: 'nuevo', services, value: services.reduce((a, id) => a + H.svc(id).price, 0), createdAt: H.today(), messages: [{ dir: 'in', text, at: new Date().toISOString().slice(0, 16) }], isNew: true });
+  }, { kind: 'lead', text: `Nuevo lead desde la web · ${d.name}` });
+  e.target.reset();
+  toast('Thanks! Your request was sent. (Demo: it just landed in the CRM as an organic lead.)');
+});
+
+renderPlans();
+DB.ready();
+</script>
+</body>
+</html>

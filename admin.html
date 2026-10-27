@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Best Work 360 · Plataforma central (demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/base.css?v=2">
+<style>
+  body { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
+  aside.side { background: var(--navy); color: #cbd5e1; padding: 20px 14px; position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; gap: 4px; }
+  aside.side .nav { flex: 1; min-height: 0; overflow-y: auto; margin: 0 -6px; padding: 0 6px; }
+  .brand { display: flex; gap: 10px; align-items: center; padding: 4px 8px 20px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 14px; }
+  .brand .mark { width: 38px; height: 38px; border-radius: 10px; background: var(--gold); color: var(--navy); display: grid; place-items: center; font-family: var(--display); font-weight: 800; }
+  .brand b { color: #fff; font-family: var(--display); font-size: 16px; display: block; }
+  .brand small { font-size: 12px; color: #94a3b8; }
+  .nav-group { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: #64748b; font-weight: 700; padding: 14px 10px 6px; }
+  .nav a { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; text-decoration: none; font-size: 14px; font-weight: 500; color: #cbd5e1; cursor: pointer; }
+  .nav a:hover { background: rgba(255,255,255,.06); color: #fff; }
+  .nav a.on { background: rgba(212,167,44,.14); color: var(--gold); }
+  .nav a svg { width: 18px; height: 18px; flex: none; }
+  .nav a .count { margin-left: auto; background: var(--gold); color: var(--navy); font-size: 11px; font-weight: 700; border-radius: 999px; padding: 1px 7px; }
+  .nav a.locked { color: #64748b; }
+  .nav a.locked .lk { margin-left: auto; font-size: 10px; border: 1px solid #334155; border-radius: 6px; padding: 1px 6px; }
+
+  main { min-width: 0; }
+  .topbar { position: sticky; top: 0; z-index: 30; background: rgba(244,246,249,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 14px 28px; }
+  .topbar h1 { font-size: 21px; color: var(--navy); }
+  .topbar .date { color: var(--muted); font-size: 13.5px; }
+  .topbar .right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .side-role { display: grid; gap: 6px; padding: 0 4px 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: #64748b; font-weight: 700; }
+  .side-role select { width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); color: #fff; border-radius: 9px; padding: 9px 10px; font-size: 13.5px; font-weight: 600; text-transform: none; letter-spacing: 0; cursor: pointer; }
+  .side-role select option { color: var(--ink); }
+  .side-foot { margin-top: auto; display: grid; gap: 8px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.08); }
+  .btn-side { width: 100%; background: rgba(255,255,255,.06); color: #e2e8f0; border: 1px solid rgba(255,255,255,.14); }
+  .btn-side:hover { background: rgba(212,167,44,.16); color: var(--gold); border-color: rgba(212,167,44,.4); }
+  .content { padding: 24px 28px 100px; display: grid; gap: 20px; }
+
+  .grid { display: grid; gap: 20px; }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+  .g2 { grid-template-columns: 1fr 1fr; }
+  .g32 { grid-template-columns: 1.6fr 1fr; }
+  @media (max-width: 1200px) { .g4 { grid-template-columns: repeat(2, 1fr); } .g32, .g2 { grid-template-columns: 1fr; } }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; min-width: 0; }
+  .card h3 { font-size: 16px; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+  .card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .kpi small { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .kpi .v { font-family: var(--display); font-size: 30px; font-weight: 700; color: var(--navy); margin: 6px 0 4px; letter-spacing: -.01em; }
+  .kpi .s { font-size: 13px; color: var(--muted); }
+  .kpi .s b { color: var(--green); }
+  .kpi.hl { background: var(--navy); border-color: var(--navy); }
+  .kpi.hl small, .kpi.hl .s { color: #94a3b8; }
+  .kpi.hl .v { color: var(--gold); }
+
+  table.t { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.t th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  table.t td { padding: 11px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+  table.t tr.click { cursor: pointer; }
+  table.t tr.click:hover td { background: #f8fafc; }
+  table.t tr.new td { background: #fffbeb; }
+  .tw { overflow-x: auto; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .muted { color: var(--muted); }
+  .sm { font-size: 12.5px; }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .thumbs { display: flex; gap: 4px; }
+  .thumbs img { width: 40px; height: 30px; object-fit: cover; border-radius: 5px; border: 1px solid var(--line); }
+
+  .bars { display: flex; align-items: flex-end; gap: 3px; height: 160px; padding-top: 10px; }
+  .bars .b { flex: 1; display: flex; flex-direction: column-reverse; min-width: 0; border-radius: 3px 3px 0 0; overflow: hidden; }
+  .bars .b span { display: block; }
+  .bars .b:hover { filter: brightness(1.1); }
+  .axis { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+  .legend { display: flex; gap: 14px; font-size: 12.5px; color: var(--muted); }
+  .hbar { display: grid; grid-template-columns: 110px 1fr 54px; gap: 10px; align-items: center; font-size: 13.5px; margin: 8px 0; }
+  .hbar .track { background: #f1f5f9; border-radius: 6px; height: 12px; overflow: hidden; }
+  .hbar .fill { height: 100%; border-radius: 6px; }
+
+  .feed { display: grid; gap: 10px; max-height: 330px; overflow-y: auto; }
+  .feed .ev { display: flex; gap: 10px; font-size: 13.5px; line-height: 1.4; }
+  .feed .ev .ic { flex: none; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 14px; }
+  .feed .ev time { display: block; font-size: 11.5px; color: var(--muted); }
+  .alert { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 10px; background: #f8fafc; border: 1px solid var(--line); font-size: 13.5px; cursor: pointer; }
+  .alert:hover { border-color: var(--blue); }
+  .alert .n { font-family: var(--display); font-weight: 700; font-size: 18px; min-width: 28px; text-align: center; }
+  .alert.warn .n { color: #b45309; } .alert.red .n { color: var(--red); } .alert.ok .n { color: var(--green); }
+
+  .pipeline { display: grid; grid-template-columns: repeat(5, minmax(220px, 1fr)); gap: 14px; overflow-x: auto; padding-bottom: 6px; }
+  .col { background: #eef1f5; border-radius: 14px; padding: 12px; min-height: 240px; }
+  .col h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: flex; justify-content: space-between; margin: 2px 4px 10px; }
+  .lead { background: #fff; border-radius: 11px; padding: 12px; margin-bottom: 9px; border: 1px solid var(--line); cursor: pointer; display: grid; gap: 7px; }
+  .lead:hover { border-color: var(--blue); box-shadow: var(--shadow); }
+  .lead[draggable] { cursor: grab; }
+  .lead.dragging { opacity: .4; }
+  .col.drop-over { background: #dfe7f2; box-shadow: inset 0 0 0 2px var(--blue); }
+  .lead.new { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,167,44,.18); }
+  .lead b { color: var(--navy); font-size: 14.5px; }
+  .lead .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filters button { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .filters button.on { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+  .board { display: grid; grid-template-columns: repeat(4, minmax(230px, 1fr)); gap: 14px; overflow-x: auto; }
+  .job { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--blue); border-radius: 11px; padding: 12px; margin-bottom: 9px; cursor: pointer; display: grid; gap: 6px; font-size: 13.5px; }
+  .job:hover { box-shadow: var(--shadow); }
+  .job.done { border-left-color: var(--green); }
+  .job.prog { border-left-color: var(--gold); }
+  .job b { color: var(--navy); }
+
+  .drawer-bg { position: fixed; inset: 0; background: rgba(15,23,42,.35); z-index: 100; display: none; }
+  .drawer-bg.on { display: block; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 100vw); background: #fff; z-index: 101; transform: translateX(100%); transition: transform .25s ease; display: flex; flex-direction: column; box-shadow: -20px 0 50px rgba(0,0,0,.15); }
+  .drawer.on { transform: none; }
+  .drawer .dh { padding: 20px 24px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+  .drawer .dh h2 { font-size: 20px; color: var(--navy); }
+  .drawer .db { padding: 20px 24px 40px; overflow-y: auto; display: grid; gap: 18px; align-content: start; flex: 1; }
+  .x { background: none; border: 0; font-size: 26px; line-height: 1; color: var(--muted); cursor: pointer; }
+  .kv { display: grid; grid-template-columns: 130px 1fr; gap: 8px 12px; font-size: 14px; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; font-weight: 500; }
+  .sec-t { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; margin-bottom: 8px; }
+
+  .wa { background: #efeae2; border-radius: 14px; padding: 14px; display: grid; gap: 8px; max-height: 340px; overflow-y: auto; }
+  .wa .m { max-width: 82%; padding: 8px 11px 6px; border-radius: 10px; font-size: 14px; line-height: 1.4; box-shadow: 0 1px 1px rgba(0,0,0,.08); }
+  .wa .m time { display: block; text-align: right; font-size: 10.5px; color: #667781; margin-top: 2px; }
+  .wa .in { background: #fff; justify-self: start; border-top-left-radius: 2px; }
+  .wa .out { background: #d9fdd3; justify-self: end; border-top-right-radius: 2px; }
+  .wa .empty { text-align: center; color: #667781; font-size: 13px; }
+  .wa-head { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .wa-head .g { width: 9px; height: 9px; border-radius: 50%; background: #25D366; }
+  .reply { display: flex; gap: 8px; }
+  .quick { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ba img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .gitem { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .gitem .ba { gap: 2px; }
+  .gitem .ba img { border-radius: 0; border: 0; }
+  .gitem .cap { padding: 10px 12px; font-size: 13px; display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+
+  .modal-bg { position: fixed; inset: 0; background: rgba(15,23,42,.45); z-index: 150; display: none; align-items: flex-start; justify-content: center; padding: 60px 16px; overflow-y: auto; }
+  .modal-bg.on { display: flex; }
+  .modal { background: #fff; border-radius: 18px; width: 100%; max-width: 520px; padding: 24px; display: grid; gap: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.25); }
+  .modal h3 { color: var(--navy); font-size: 19px; }
+  .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .checks label { display: flex; gap: 8px; align-items: center; font-size: 13.5px; font-weight: 500; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .locked-view { text-align: center; padding: 70px 20px; display: grid; gap: 12px; justify-items: center; }
+  .locked-view .lock { width: 64px; height: 64px; border-radius: 18px; background: var(--navy); color: var(--gold); display: grid; place-items: center; font-size: 28px; }
+  .banner { background: linear-gradient(90deg, var(--navy), var(--blue)); color: #fff; border-radius: var(--radius); padding: 16px 20px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .banner b { color: var(--gold); }
+  .banner .btn { margin-left: auto; }
+  .progress { height: 8px; background: #e2e8f0; border-radius: 6px; overflow: hidden; }
+  .progress div { height: 100%; background: var(--green); border-radius: 6px; transition: width .3s; }
+  .mig { display: grid; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+
+  @media (max-width: 900px) {
+    body { grid-template-columns: 212px minmax(0, 1fr); }
+    aside.side { padding: 16px 10px; }
+    .nav a { font-size: 13.5px; padding: 8px; }
+    .g2, .g32 { grid-template-columns: minmax(0, 1fr); }
+    .kv { grid-template-columns: 110px 1fr; }
+    .content { padding: 16px 16px 100px; }
+    .topbar { padding: 12px 16px; flex-wrap: wrap; }
+    .g4 { grid-template-columns: 1fr 1fr; }
+  }
+  /* Phones only: the sidebar becomes a horizontal strip above the content. */
+  @media (max-width: 600px) {
+    body { grid-template-columns: minmax(0, 1fr); }
+    aside.side { position: static; height: auto; padding: 12px 12px 10px; }
+    .brand { padding: 0 4px 10px; margin-bottom: 8px; }
+    aside.side .nav { display: flex; flex: none; gap: 4px; overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
+    .nav-group { display: none; }
+    .nav a { white-space: nowrap; flex: none; }
+    .topbar { position: static; }
+    .side-foot { grid-template-columns: 1fr 1fr; padding-top: 10px; }
+    .g4 { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
+</head>
+<body>
+<aside class="side">
+  <div class="brand"><div class="mark">BW</div><div><b>Best Work 360</b><small>Near Me Best Work</small></div></div>
+  <label class="side-role">Entrar como<select id="role"></select></label>
+  <nav class="nav" id="nav"></nav>
+  <div class="side-foot">
+    <a class="btn btn-sm btn-side" href="app.html" target="_blank">Abrir app de campo ↗</a>
+    <button class="btn btn-sm btn-side" id="resetBtn" title="Vuelve a los datos de ejemplo">Reiniciar demo</button>
+  </div>
+</aside>
+<main>
+  <div class="topbar">
+    <div><h1 id="title">Panel</h1><div class="date" id="today"></div></div>
+  </div>
+  <div class="content" id="content"></div>
+</main>
+
+<div class="drawer-bg" id="drawerBg"></div>
+<div class="drawer" id="drawer"></div>
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="toast-wrap" id="toasts"></div>
+<nav class="demo-nav"><span class="tag">Demo</span><a href="index.html">Landing</a><a class="on" href="admin.html">Plataforma</a><a href="app.html">App de campo</a></nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/config.js?v=3"></script>
+<script src="assets/store.js?v=3"></script>
+<script>
+const { PLANS, SERVICES, TECHS, USERS, PAY_METHODS, helpers: H } = DB;
+const { usd, esc, svc, tech, fmtDate } = H;
+
+const ICONS = {
+  panel: '<path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>',
+  crm: '<path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 11H7v-2h10v2zm0-3H7V8h10v2z"/>',
+  trabajos: '<path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/>',
+  clientes: '<path d="M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5C15 14.2 10.3 13 8 13zm8 0c-.3 0-.6 0-1 .1 1.2.8 2 2 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z"/>',
+  membresias: '<path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/>',
+  contabilidad: '<path d="M4 4h16v4H4zm0 6h7v10H4zm9 0h7v4h-7zm0 6h7v4h-7z"/>',
+  galeria: '<path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>',
+  config: '<path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.3 7.3 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.3 7.3 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.3 7.3 0 0 0 1.7 1L11 21h4l.4-2.9a7.3 7.3 0 0 0 1.7-1l2.5 1 2-3.5-2.2-1.6zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>',
+  lock: '<path d="M18 8h-1V6a5 5 0 0 0-10 0v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zM9 6a3 3 0 0 1 6 0v2H9V6z"/>',
+};
+const ico = (k) => `<svg viewBox="0 0 24 24" fill="currentColor">${ICONS[k]}</svg>`;
+
+const VIEWS = [
+  { id: 'panel', label: 'Panel', group: 'Operación' },
+  { id: 'crm', label: 'CRM y WhatsApp', group: 'Operación' },
+  { id: 'trabajos', label: 'Trabajos y agenda', group: 'Operación' },
+  { id: 'clientes', label: 'Clientes', group: 'Operación' },
+  { id: 'membresias', label: 'Membresías', group: 'Operación' },
+  { id: 'contabilidad', label: 'Resumen diario', group: 'Finanzas' },
+  { id: 'galeria', label: 'Galería antes/después', group: 'Marketing' },
+  { id: 'config', label: 'Configuración', group: 'Ajustes' },
+];
+const LOCKED = [
+  { id: 'm5', label: 'Agente de ventas IA', mod: 'M5', desc: 'El método de venta de David por escrito y un agente que responde y califica leads con ese método, conectado a este CRM.' },
+  { id: 'm7', label: 'Contabilidad completa', mod: 'M7', desc: 'Ingresos, gastos y reportes para la contadora dentro de la plataforma, para reemplazar QuickBooks.' },
+  { id: 'm8', label: 'Inventario', mod: 'M8', desc: 'Químicos, materiales y consumo por trabajo.' },
+  { id: 'm9', label: 'Tienda en línea', mod: 'M9', desc: 'Venta de productos de mantenimiento, cuando David defina sus proveedores.' },
+];
+const ROLE_VIEWS = {
+  owner: VIEWS.map((v) => v.id),
+  crm: ['panel', 'crm', 'trabajos', 'clientes', 'membresias', 'galeria'],
+  conta: ['contabilidad', 'membresias'],
+  tech: [],
+};
+
+const ui = { view: 'panel', role: 'owner', leadFilter: 'Todos', jobDate: H.today(), contaDate: H.today(), clientQ: '' };
+let S = DB.load();
+let seenEvents = new Set(S.events.map((e) => e.id));
+
+// ---------- derived helpers ----------
+const client = (id) => S.clients.find((c) => c.id === id) || { name: 'Cliente', address: '', phone: '' };
+const memberOf = (cid) => S.members.find((m) => m.clientId === cid && m.status === 'activa');
+const monthlyEq = (m) => (m.billing === 'annual' ? m.price / 12 : m.price);
+const mrr = () => S.members.filter((m) => m.status === 'activa').reduce((s, m) => s + monthlyEq(m), 0);
+const svcList = (ids) => ids.map((id) => svc(id).es).join(' + ') || 'Por definir';
+const statusChip = (s) => ({ programado: '<span class="chip gray">Programado</span>', en_curso: '<span class="chip gold">En curso</span>', completado: '<span class="chip green">Completado</span>' }[s] || s);
+const planChip = (p) => `<span class="chip ${p === 'gold' ? 'gold' : p === 'platinum' ? 'sky' : 'gray'}">${PLANS[p].name}</span>`;
+const originChip = (o) => `<span class="chip ${o === 'Orgánico' ? 'green' : o === 'Thumbtack' ? 'red' : o === 'Google' ? 'sky' : 'gold'}">${o}</span>`;
+const thumbs = (arr) => `<div class="thumbs">${(arr || []).slice(0, 2).map((p) => `<img src="${H.photoSrc(p)}" alt="">`).join('')}</div>`;
+const timeAgo = (isoStr) => { const d = (Date.now() - new Date(isoStr).getTime()) / 60000; return d < 1 ? 'ahora' : d < 60 ? `hace ${Math.round(d)} min` : d < 1440 ? `hace ${Math.round(d / 60)} h` : fmtDate(isoStr.slice(0, 10)); };
+const monthKey = H.today().slice(0, 7);
+
+function toast(msg) {
+  const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = '<span>' + msg + '</span>';
+  document.getElementById('toasts').appendChild(t); setTimeout(() => t.remove(), 5000);
+}
+function save(fn, ev) { DB.update(fn, ev); S = DB.load(); if (ev) seenEvents.add(S.events[0].id); render(); }
+
+// ---------- shell ----------
+function renderNav() {
+  const allowed = ROLE_VIEWS[ui.role];
+  const newLeads = S.leads.filter((l) => l.status === 'nuevo').length;
+  const pendingVisits = S.members.flatMap((m) => m.visits).filter((v) => v.status === 'pendiente' && v.due <= H.addDays(H.today(), 14)).length;
+  let html = '', group = '';
+  VIEWS.filter((v) => allowed.includes(v.id)).forEach((v) => {
+    if (v.group !== group) { group = v.group; html += `<div class="nav-group">${group}</div>`; }
+    const count = v.id === 'crm' && newLeads ? newLeads : v.id === 'membresias' && pendingVisits ? pendingVisits : 0;
+    html += `<a data-go="${v.id}" class="${ui.view === v.id ? 'on' : ''}">${ico(v.id)}${v.label}${count ? `<span class="count">${count}</span>` : ''}</a>`;
+  });
+  if (ui.role === 'owner') {
+    html += '<div class="nav-group">Fase 2 · extensiones</div>';
+    LOCKED.forEach((l) => { html += `<a data-go="${l.id}" class="locked ${ui.view === l.id ? 'on' : ''}">${ico('lock')}${l.label}<span class="lk">${l.mod}</span></a>`; });
+  }
+  document.getElementById('nav').innerHTML = html;
+}
+
+function render() {
+  const allowed = ROLE_VIEWS[ui.role];
+  if (ui.role !== 'owner' && !allowed.includes(ui.view)) ui.view = allowed[0] || 'none';
+  renderNav();
+  const v = VIEWS.find((x) => x.id === ui.view) || LOCKED.find((x) => x.id === ui.view);
+  document.getElementById('title').textContent = v ? v.label : 'Técnicos';
+  const el = document.getElementById('content');
+  const fn = { panel: vPanel, crm: vCrm, trabajos: vTrabajos, clientes: vClientes, membresias: vMembresias, contabilidad: vConta, galeria: vGaleria, config: vConfig }[ui.view];
+  el.innerHTML = ui.role === 'tech' ? vTech() : fn ? fn() : vLocked(LOCKED.find((x) => x.id === ui.view));
+}
+
+// ---------- views ----------
+function vPanel() {
+  const T = H.today();
+  const monthPay = S.payments.filter((p) => p.date.startsWith(monthKey));
+  const monthTotal = monthPay.reduce((s, p) => s + p.amount, 0);
+  const memberIncome = monthPay.filter((p) => p.type === 'membresía').reduce((s, p) => s + p.amount, 0);
+  const todayJobs = S.jobs.filter((j) => j.date === T).sort((a, b) => a.time.localeCompare(b.time));
+  const doneToday = todayJobs.filter((j) => j.status === 'completado');
+  const active = S.members.filter((m) => m.status === 'activa');
+  const weekLeads = S.leads.filter((l) => l.createdAt >= H.addDays(T, -7));
+  const organic = weekLeads.filter((l) => l.origin !== 'Thumbtack').length;
+
+  // 30-day revenue bars
+  const days = []; for (let i = 29; i >= 0; i--) days.push(H.addDays(T, -i));
+  const byDay = days.map((d) => { const ps = S.payments.filter((p) => p.date === d); return { d, job: ps.filter((p) => p.type === 'trabajo').reduce((s, p) => s + p.amount, 0), mem: ps.filter((p) => p.type === 'membresía').reduce((s, p) => s + p.amount, 0) }; });
+  const maxDay = Math.max(1, ...byDay.map((x) => x.job + x.mem));
+
+  const origins = ['Orgánico', 'Thumbtack', 'Google', 'Referido'];
+  const monthLeads = S.leads.length;
+  const oCount = origins.map((o) => [o, S.leads.filter((l) => l.origin === o).length]);
+  const oMax = Math.max(1, ...oCount.map((x) => x[1]));
+  const oColor = { 'Orgánico': 'var(--green)', 'Thumbtack': '#e05252', 'Google': 'var(--sky)', 'Referido': 'var(--gold)' };
+
+  const overdue = S.members.flatMap((m) => m.visits.map((v) => ({ ...v, m }))).filter((v) => v.status === 'pendiente' && v.due < T);
+  const newLeads = S.leads.filter((l) => l.status === 'nuevo');
+  const openToday = todayJobs.filter((j) => j.status !== 'completado');
+  const sent = S.reportsSent[T];
+
+  return `
+  <div class="banner">
+    <div>Lo que reportan los técnicos en la app de campo <b>llega aquí solo</b>: trabajos, fotos, cobros y el resumen para la contadora. Nadie lo vuelve a escribir en la noche.</div>
+    <a class="btn btn-gold btn-sm" href="app.html" target="_blank">Ver app de campo ↗</a>
+  </div>
+  <div class="grid g4">
+    <div class="card kpi hl"><small>Ingresos del mes</small><div class="v">${usd(monthTotal)}</div><div class="s">${usd(memberIncome)} por membresías</div></div>
+    <div class="card kpi"><small>Trabajos de hoy</small><div class="v">${doneToday.length} / ${todayJobs.length}</div><div class="s">${usd(doneToday.reduce((s, j) => s + j.amount, 0))} cobrados hoy</div></div>
+    <div class="card kpi"><small>Membresías activas</small><div class="v">${active.length}</div><div class="s"><b>${usd(mrr())}</b> de ingreso fijo al mes</div></div>
+    <div class="card kpi"><small>Leads últimos 7 días</small><div class="v">${weekLeads.length}</div><div class="s"><b>${weekLeads.length ? Math.round((organic / weekLeads.length) * 100) : 0}%</b> sin pagar Thumbtack</div></div>
+  </div>
+  <div class="grid g32">
+    <div class="card">
+      <div class="card-head"><h3>Trabajos de hoy</h3><a class="btn btn-ghost btn-sm" data-go="trabajos">Ver agenda</a></div>
+      <div class="tw"><table class="t">
+        <thead><tr><th>Hora</th><th>Cliente</th><th>Servicio</th><th>Técnico</th><th>Estado</th><th>Fotos</th><th class="num">Valor</th></tr></thead>
+        <tbody>${todayJobs.map((j) => `<tr class="click" data-job="${j.id}"><td>${j.time}</td><td><b>${esc(client(j.clientId).name)}</b>${j.memberId ? ' <span class="chip sky sm">Miembro</span>' : ''}</td><td class="sm">${svcList(j.services)}</td><td><span class="dot" style="background:${tech(j.techId).color}"></span>${tech(j.techId).name.split(' ')[0]}</td><td>${statusChip(j.status)}</td><td>${j.after.length || j.before.length ? thumbs([...j.before, ...j.after]) : '<span class="muted sm">—</span>'}</td><td class="num">${j.memberId ? '<span class="muted sm">Incluido</span>' : usd(j.amount)}</td></tr>`).join('') || '<tr><td colspan="7" class="muted">Sin trabajos hoy</td></tr>'}</tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Pendientes</h3></div>
+      <div style="display:grid; gap:8px">
+        <div class="alert ${newLeads.length ? 'warn' : 'ok'}" data-go="crm"><span class="n">${newLeads.length}</span>Leads nuevos sin responder</div>
+        <div class="alert ${overdue.length ? 'red' : 'ok'}" data-go="membresias"><span class="n">${overdue.length}</span>Visitas de membresía vencidas sin agendar</div>
+        <div class="alert ${openToday.length ? 'warn' : 'ok'}" data-go="trabajos"><span class="n">${openToday.length}</span>Trabajos de hoy sin cerrar</div>
+        <div class="alert ${sent ? 'ok' : 'warn'}" data-go="contabilidad"><span class="n">${sent ? '✓' : '!'}</span>${sent ? 'Resumen de hoy enviado a la contadora' : 'Resumen de hoy sin enviar a la contadora'}</div>
+      </div>
+      <div class="sec-t" style="margin-top:18px">Actividad en vivo</div>
+      <div class="feed">${S.events.slice(0, 8).map(evHtml).join('') || '<div class="muted sm">Aquí aparece lo que pasa en la web y en la app de campo, en tiempo real.</div>'}</div>
+    </div>
+  </div>
+  <div class="grid g32">
+    <div class="card">
+      <div class="card-head"><h3>Ingresos de los últimos 30 días</h3><div class="legend"><span><span class="dot" style="background:var(--blue)"></span>Trabajos</span><span><span class="dot" style="background:var(--gold)"></span>Membresías</span></div></div>
+      <div class="bars">${byDay.map((x) => `<div class="b" title="${fmtDate(x.d)} · ${usd(x.job + x.mem)}" style="height:${((x.job + x.mem) / maxDay) * 100}%"><span style="height:${x.job + x.mem ? (x.job / (x.job + x.mem)) * 100 : 0}%; background:var(--blue)"></span><span style="flex:1; background:var(--gold)"></span></div>`).join('')}</div>
+      <div class="axis"><span>${fmtDate(days[0])}</span><span>${fmtDate(days[15])}</span><span>Hoy</span></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Origen de los leads</h3><span class="muted sm">${monthLeads} leads en el CRM</span></div>
+      ${oCount.map(([o, n]) => `<div class="hbar"><span>${o}</span><div class="track"><div class="fill" style="width:${(n / oMax) * 100}%; background:${oColor[o]}"></div></div><b class="num">${n}</b></div>`).join('')}
+      <p class="muted sm" style="margin:14px 0 0; line-height:1.5">Cada lead guarda su origen. Así se ve mes a mes cuánto llega orgánico y cuánto se sigue pagando en Thumbtack.</p>
+    </div>
+  </div>`;
+}
+function evHtml(e) {
+  const map = { member: ['★', 'var(--gold-soft)'], lead: ['✉', '#E0F2FB'], job: ['✓', '#E3F5DE'], photo: ['◉', '#EEF2F7'], report: ['$', '#EEF2F7'] };
+  const [i, bg] = map[e.kind] || ['•', '#EEF2F7'];
+  return `<div class="ev"><div class="ic" style="background:${bg}">${i}</div><div>${esc(e.text)}<time>${timeAgo(e.at)}</time></div></div>`;
+}
+
+function vCrm() {
+  const F = ['Todos', 'Orgánico', 'Thumbtack', 'Google', 'Referido'];
+  const leads = S.leads.filter((l) => ui.leadFilter === 'Todos' || l.origin === ui.leadFilter);
+  const cols = [['nuevo', 'Nuevos'], ['contactado', 'Contactados'], ['cotizado', 'Cotizados'], ['ganado', 'Ganados'], ['perdido', 'Perdidos']];
+  const chIcon = { WhatsApp: '🟢', Web: '🌐', Llamada: '📞', 'Walk-in': '🚶', Thumbtack: '📌' };
+  return `
+  <div class="card-head" style="margin:0">
+    <div class="filters">${F.map((f) => `<button data-lf="${f}" class="${ui.leadFilter === f ? 'on' : ''}">${f}</button>`).join('')}</div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap"><span class="chip green" style="padding:7px 12px; white-space:normal">● WhatsApp conectado · (407) 800-5400</span><button class="btn btn-navy btn-sm" data-act="newLead">+ Lead de llamada o walk-in</button></div>
+  </div>
+  <p class="muted sm" style="margin:0">Arrastra las tarjetas con el mouse para cambiarlas de etapa. Haz clic en una para ver la conversación.</p>
+  <div class="pipeline">${cols.map(([k, label]) => {
+    const ls = leads.filter((l) => l.status === k);
+    return `<div class="col" data-status="${k}"><h4>${label}<span>${ls.length}</span></h4>${ls.map((l) => `
+      <div class="lead ${l.isNew ? 'new' : ''}" data-lead="${l.id}" draggable="true">
+        <div class="row" style="justify-content:space-between"><b>${esc(l.name)}</b><span class="sm muted">${fmtDate(l.createdAt)}</span></div>
+        <div class="sm muted">${svcList(l.services)}</div>
+        <div class="row">${originChip(l.origin)}<span class="chip gray">${chIcon[l.channel] || ''} ${l.channel}</span>${l.value ? `<span class="sm" style="margin-left:auto; font-weight:600">${usd(l.value)}</span>` : ''}</div>
+        ${l.messages.length ? `<div class="sm muted" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis">“${esc(l.messages[l.messages.length - 1].text)}”</div>` : ''}
+      </div>`).join('')}</div>`;
+  }).join('')}</div>`;
+}
+
+function vTrabajos() {
+  const d = ui.jobDate;
+  const jobs = S.jobs.filter((j) => j.date === d).sort((a, b) => a.time.localeCompare(b.time));
+  const total = jobs.reduce((s, j) => s + (j.memberId ? 0 : j.amount), 0);
+  return `
+  <div class="card-head" style="margin:0">
+    <div style="display:flex; gap:8px; align-items:center">
+      <button class="btn btn-ghost btn-sm" data-day="-1">‹</button>
+      <input type="date" class="input" style="width:auto; padding:7px 10px" id="jobDate" value="${d}">
+      <button class="btn btn-ghost btn-sm" data-day="1">›</button>
+      <button class="btn btn-ghost btn-sm" data-day="0">Hoy</button>
+      <span class="muted sm" style="margin-left:8px">${jobs.length} trabajos · ${usd(total)}</span>
+    </div>
+    <button class="btn btn-navy btn-sm" data-act="newJob">+ Nuevo trabajo</button>
+  </div>
+  <div class="board">${TECHS.map((t) => {
+    const tj = jobs.filter((j) => j.techId === t.id);
+    return `<div class="col"><h4><span><span class="dot" style="background:${t.color}"></span>${t.name}</span><span>${tj.length}</span></h4>${tj.map((j) => `
+      <div class="job ${j.status === 'completado' ? 'done' : j.status === 'en_curso' ? 'prog' : ''}" data-job="${j.id}">
+        <div style="display:flex; justify-content:space-between"><b>${j.time} · ${esc(client(j.clientId).name)}</b></div>
+        <div class="muted sm">${esc(client(j.clientId).address)}</div>
+        <div class="sm">${svcList(j.services)}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center">${statusChip(j.status)}<span class="sm" style="font-weight:600">${j.memberId ? 'Membresía' : usd(j.amount)}</span></div>
+        ${j.after.length ? thumbs([...j.before, ...j.after]) : ''}
+      </div>`).join('') || '<div class="muted sm" style="padding:6px">Libre</div>'}</div>`;
+  }).join('')}</div>`;
+}
+
+function vClientes() {
+  const q = ui.clientQ.toLowerCase();
+  const rows = S.clients.filter((c) => !q || (c.name + c.address + c.phone).toLowerCase().includes(q)).map((c) => {
+    const js = S.jobs.filter((j) => j.clientId === c.id && j.status === 'completado');
+    const spent = S.payments.filter((p) => p.clientId === c.id).reduce((s, p) => s + p.amount, 0);
+    const last = js.map((j) => j.date).sort().pop();
+    return { c, js, spent, last, m: memberOf(c.id) };
+  });
+  return `
+  <div class="card">
+    <div class="card-head"><input class="input" style="max-width:340px" placeholder="Buscar por nombre, dirección o teléfono" id="clientQ" value="${esc(ui.clientQ)}"><span class="muted sm">${S.clients.length} clientes · importados desde Zoho en F0</span></div>
+    <div class="tw"><table class="t">
+      <thead><tr><th>Cliente</th><th>Dirección</th><th>Origen</th><th>Membresía</th><th class="num">Trabajos</th><th class="num">Total pagado</th><th>Última visita</th></tr></thead>
+      <tbody>${rows.map(({ c, js, spent, last, m }) => `<tr class="click ${m && m.isNew ? 'new' : ''}" data-client="${c.id}"><td><b>${esc(c.name)}</b><div class="muted sm">${esc(c.phone)}</div></td><td class="sm">${esc(c.address)}</td><td>${originChip(c.origin)}</td><td>${m ? planChip(m.plan) + ` <span class="muted sm">${m.band}</span>` : '<span class="muted sm">—</span>'}</td><td class="num">${js.length}</td><td class="num">${usd(spent)}</td><td class="sm">${last ? fmtDate(last) : '—'}</td></tr>`).join('')}</tbody>
+    </table></div>
+  </div>`;
+}
+
+function vMembresias() {
+  const T = H.today();
+  const act = S.members.filter((m) => m.status === 'activa');
+  const byPlan = ['base', 'gold', 'platinum'].map((p) => [p, act.filter((m) => m.plan === p)]);
+  const visits = act.flatMap((m) => m.visits.map((v) => ({ ...v, m }))).filter((v) => v.status === 'pendiente' && v.due <= H.addDays(T, 30)).sort((a, b) => a.due.localeCompare(b.due));
+  const annualCount = act.filter((m) => m.billing === 'annual').length;
+  return `
+  <div class="grid g4">
+    <div class="card kpi hl"><small>Ingreso fijo mensual</small><div class="v">${usd(mrr())}</div><div class="s">llueva o no</div></div>
+    <div class="card kpi"><small>Miembros activos</small><div class="v">${act.length}</div><div class="s">${annualCount} pagaron el año completo</div></div>
+    <div class="card kpi"><small>Proyección a 12 meses</small><div class="v">${usd(mrr() * 12)}</div><div class="s">con los miembros de hoy</div></div>
+    <div class="card kpi"><small>Visitas por agendar (30 días)</small><div class="v">${visits.length}</div><div class="s">${visits.filter((v) => v.due < T).length} ya vencidas</div></div>
+  </div>
+  <div class="grid g32">
+    <div class="card">
+      <div class="card-head"><h3>Servicios incluidos por agendar</h3><span class="muted sm">Se crean solos al activar cada membresía</span></div>
+      <div class="tw"><table class="t"><thead><tr><th>Cliente</th><th>Plan</th><th>Servicio</th><th>Fecha sugerida</th><th></th></tr></thead>
+      <tbody>${visits.slice(0, 14).map((v) => `<tr><td><b>${esc(client(v.m.clientId).name)}</b>${v.m.isNew ? ' <span class="chip gold">Nuevo</span>' : ''}</td><td>${planChip(v.m.plan)}</td><td class="sm">${svc(v.svc).es}</td><td class="sm">${v.due < T ? `<span class="chip red">Vencida · ${fmtDate(v.due)}</span>` : fmtDate(v.due)}</td><td class="num"><button class="btn btn-navy btn-sm" data-sched="${v.m.id}|${v.id}">Agendar</button></td></tr>`).join('') || '<tr><td colspan="5" class="muted">Todo agendado</td></tr>'}</tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Miembros por plan</h3></div>
+      ${byPlan.map(([p, ms]) => `<div class="hbar"><span>${PLANS[p].name}</span><div class="track"><div class="fill" style="width:${act.length ? (ms.length / act.length) * 100 : 0}%; background:${p === 'gold' ? 'var(--gold)' : p === 'platinum' ? 'var(--sky)' : 'var(--blue)'}"></div></div><b class="num">${ms.length}</b></div>`).join('')}
+      <div class="sec-t" style="margin-top:20px">Precios por banda (mensual)</div>
+      <table class="t sm"><thead><tr><th>Banda</th><th class="num">Base</th><th class="num">Gold</th><th class="num">Platinum</th></tr></thead><tbody>
+      ${['S', 'M', 'L'].map((b) => `<tr><td>${b}</td><td class="num">${usd(PLANS.base.monthly[b])}</td><td class="num">${usd(PLANS.gold.monthly[b])}</td><td class="num">${usd(PLANS.platinum.monthly[b])}</td></tr>`).join('')}
+      <tr><td>XL</td><td colspan="3" class="muted">Precio personalizado con estimado gratis</td></tr></tbody></table>
+      <p class="muted sm" style="line-height:1.5">Cobro automático con Square. Contrato de 12 meses; techo a $0.25/pie² y el cliente paga la diferencia.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h3>Todos los miembros</h3><a class="btn btn-ghost btn-sm" href="index.html#plans" target="_blank">Ver formulario en la web ↗</a></div>
+    <div class="tw"><table class="t"><thead><tr><th>Cliente</th><th>Plan</th><th>Banda</th><th>Pago</th><th class="num">Valor</th><th>Desde</th><th>Visitas del año</th></tr></thead>
+    <tbody>${S.members.map((m) => { const done = m.visits.filter((v) => v.status === 'hecha').length; return `<tr class="click ${m.isNew ? 'new' : ''}" data-client="${m.clientId}"><td><b>${esc(client(m.clientId).name)}</b>${m.isNew ? ' <span class="chip gold">Nuevo desde la web</span>' : ''}</td><td>${planChip(m.plan)}</td><td>${m.band}</td><td class="sm">${m.billing === 'annual' ? 'Anual' : 'Mensual (auto)'}</td><td class="num">${usd(m.price)}${m.billing === 'annual' ? '/año' : '/mes'}</td><td class="sm">${fmtDate(m.start)}</td><td><div style="display:flex; gap:8px; align-items:center"><div class="progress" style="width:90px"><div style="width:${(done / m.visits.length) * 100}%"></div></div><span class="sm muted">${done}/${m.visits.length}</span></div></td></tr>`; }).join('')}</tbody></table></div>
+  </div>`;
+}
+
+function vConta() {
+  const d = ui.contaDate;
+  const ins = S.payments.filter((p) => p.date === d);
+  const outs = S.expenses.filter((e) => e.date === d);
+  const tin = ins.reduce((s, p) => s + p.amount, 0), tout = outs.reduce((s, e) => s + e.amount, 0);
+  const byMethod = {}; ins.forEach((p) => (byMethod[p.method] = (byMethod[p.method] || 0) + p.amount));
+  const concept = (p) => { if (p.type === 'membresía') { const m = S.members.find((x) => x.id === p.ref); return `Membresía ${m ? PLANS[m.plan].name : ''}`; } const j = S.jobs.find((x) => x.id === p.ref); return j ? svcList(j.services) : 'Trabajo'; };
+  const sent = S.reportsSent[d];
+  const monthIn = S.payments.filter((p) => p.date.startsWith(d.slice(0, 7))).reduce((s, p) => s + p.amount, 0);
+  const monthOut = S.expenses.filter((e) => e.date.startsWith(d.slice(0, 7))).reduce((s, e) => s + e.amount, 0);
+  return `
+  <div class="card-head" style="margin:0">
+    <div style="display:flex; gap:8px; align-items:center">
+      <button class="btn btn-ghost btn-sm" data-cday="-1">‹</button>
+      <input type="date" class="input" style="width:auto; padding:7px 10px" id="contaDate" value="${d}">
+      <button class="btn btn-ghost btn-sm" data-cday="1">›</button>
+      <button class="btn btn-ghost btn-sm" data-cday="0">Hoy</button>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center">
+      ${sent ? `<span class="chip green">Enviado a Patricia · ${new Date(sent).toLocaleTimeString('es-CO', { hour: 'numeric', minute: '2-digit' })}</span>` : ''}
+      <button class="btn btn-ghost btn-sm" data-act="csv">Descargar CSV</button>
+      <button class="btn btn-gold btn-sm" data-act="sendReport">${sent ? 'Reenviar' : 'Enviar resumen a la contadora'}</button>
+    </div>
+  </div>
+  <div class="grid g4">
+    <div class="card kpi"><small>Entró</small><div class="v" style="color:var(--green)">${usd(tin)}</div><div class="s">${ins.length} movimientos</div></div>
+    <div class="card kpi"><small>Salió</small><div class="v" style="color:var(--red)">${usd(tout)}</div><div class="s">${outs.length} gastos</div></div>
+    <div class="card kpi hl"><small>Neto del día</small><div class="v">${usd(tin - tout)}</div><div class="s">${fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })}</div></div>
+    <div class="card kpi"><small>Neto del mes</small><div class="v">${usd(monthIn - monthOut)}</div><div class="s">${usd(monthIn)} entró · ${usd(monthOut)} salió</div></div>
+  </div>
+  <div class="grid g32">
+    <div class="card">
+      <div class="card-head"><h3>Entró</h3><div class="filters">${Object.entries(byMethod).map(([m, v]) => `<span class="chip gray">${m}: ${usd(v)}</span>`).join('')}</div></div>
+      <div class="tw"><table class="t"><thead><tr><th>Cliente</th><th>Concepto</th><th>Medio de pago</th><th class="num">Monto</th></tr></thead>
+      <tbody>${ins.map((p) => `<tr><td><b>${esc(client(p.clientId).name)}</b></td><td class="sm">${concept(p)}</td><td class="sm">${p.method}</td><td class="num">${usd(p.amount)}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">Sin ingresos este día. Cuando un técnico cierra un trabajo en la app, aparece aquí.</td></tr>'}</tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Salió</h3></div>
+      <table class="t"><tbody>${outs.map((e) => `<tr><td class="sm">${esc(e.concept)}</td><td class="num">${usd(e.amount)}</td></tr>`).join('') || '<tr><td class="muted">Sin gastos registrados</td></tr>'}</tbody></table>
+      <form id="expForm" style="display:grid; grid-template-columns:1fr 90px auto; gap:8px; margin-top:12px">
+        <input class="input" name="concept" placeholder="Concepto (ej. químicos)" required>
+        <input class="input" name="amount" type="number" min="1" placeholder="$" required>
+        <button class="btn btn-navy btn-sm">Agregar</button>
+      </form>
+    </div>
+  </div>
+  <p class="muted sm" style="margin:0">Reemplaza el WhatsApp de cada noche a la contadora: Patricia entra con su propio usuario y ve solo esta sección y los pagos de membresías.</p>`;
+}
+
+function vGaleria() {
+  const done = S.jobs.filter((j) => j.status === 'completado' && j.after.length).sort((a, b) => (b.completedAt || '').localeCompare(a.completedAt || ''));
+  return `
+  <div class="card-head" style="margin:0"><p class="muted" style="margin:0">Cada foto que suben los técnicos queda aquí, lista para Instagram, TikTok, Google Business y la web.</p><span class="chip gray">${done.length} trabajos con fotos</span></div>
+  <div class="gallery">${done.slice(0, 36).map((j) => `
+    <div class="gitem" data-job="${j.id}" style="cursor:pointer">
+      <div class="ba"><img src="${H.photoSrc(j.before[0] || j.after[0])}" alt=""><img src="${H.photoSrc(j.after[0])}" alt=""></div>
+      <div class="cap"><div><b>${svcList(j.services)}</b><div class="muted sm">${esc(client(j.clientId).address.split(',').slice(1, 2).join('').trim() || 'Orlando')} · ${fmtDate(j.date)}</div></div><button class="btn btn-ghost btn-sm" data-act="share" data-id="${j.id}">Usar en redes</button></div>
+    </div>`).join('')}</div>`;
+}
+
+function vConfig() {
+  return `
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-head"><h3>Usuarios y roles</h3><button class="btn btn-ghost btn-sm" data-act="soon">+ Invitar</button></div>
+      <table class="t"><thead><tr><th>Usuario</th><th>Rol</th><th>Ve</th></tr></thead><tbody>
+      ${USERS.map((u) => `<tr><td><b>${u.name}</b></td><td><span class="chip ${u.id === 'owner' ? 'gold' : 'gray'}">${u.role}</span></td><td class="sm muted">${u.access}</td></tr>`).join('')}
+      ${TECHS.map((t) => `<tr><td><span class="dot" style="background:${t.color}"></span>${t.name}</td><td><span class="chip gray">Técnico</span></td><td class="sm muted">App de campo</td></tr>`).join('')}
+      </tbody></table>
+      <p class="muted sm">Prueba el selector “Entrar como” arriba: cada rol ve solo su parte.</p>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Servicios y precios publicados</h3></div>
+      <table class="t"><thead><tr><th>Servicio</th><th class="num">Precio</th></tr></thead><tbody>
+      ${SERVICES.map((s) => `<tr><td>${s.es}</td><td class="num">${s.id === 'screen' ? 'desde ' : ''}${usd(s.price)}</td></tr>`).join('')}
+      <tr><td>Techo en membresía</td><td class="num">$0.25 / pie²</td></tr></tbody></table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h3>Traslado de datos (F0)</h3><span class="muted sm">La plataforma reemplaza estas herramientas: se importan una vez y se dejan de usar.</span></div>
+    <div class="grid g2">
+      <div class="mig" id="mig-zoho"><b>Zoho CRM → Best Work 360</b><span class="muted sm">Clientes, direcciones, historial de trabajos y cotizaciones.</span><div class="progress"><div style="width:0%"></div></div><button class="btn btn-navy btn-sm" data-act="migrate" data-id="zoho">Simular importación</button></div>
+      <div class="mig" id="mig-qb"><b>QuickBooks → Best Work 360</b><span class="muted sm">Ingresos y gastos del año para el resumen de la contadora.</span><div class="progress"><div style="width:0%"></div></div><button class="btn btn-navy btn-sm" data-act="migrate" data-id="qb">Simular importación</button></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h3>Conexiones</h3></div>
+    <table class="t"><tbody>
+      <tr><td><b>WhatsApp Business</b><div class="muted sm">(407) 800-5400 · los mensajes entran al CRM</div></td><td><span class="chip green">Conectado (demo)</span></td></tr>
+      <tr><td><b>Square</b><div class="muted sm">Cobro mensual o anual de membresías</div></td><td><span class="chip green">Conectado (demo)</span></td></tr>
+      <tr><td><b>Sitio web</b><div class="muted sm">Formulario de estimado, membresías y botón de WhatsApp</div></td><td><span class="chip green">Conectado (demo)</span></td></tr>
+    </tbody></table>
+  </div>`;
+}
+
+function vLocked(l) {
+  return `<div class="card locked-view"><div class="lock">${ico('lock').replace('<svg', '<svg width="30" height="30"')}</div><span class="chip gold">${l.mod} · Extensión de fase 2</span><h2 style="color:var(--navy)">${l.label}</h2><p class="muted" style="max-width:520px; line-height:1.6; margin:0">${l.desc}</p><p class="muted sm" style="margin:0">Se cotiza aparte, con su alcance y plazo, cuando la operación lo requiera.</p></div>`;
+}
+function vTech() {
+  return `<div class="card locked-view"><div class="lock">📱</div><h2 style="color:var(--navy)">Los técnicos trabajan desde el celular</h2><p class="muted" style="max-width:480px; line-height:1.6; margin:0">Con el rol Técnico no se entra a la plataforma: se instala la app de campo y ahí ven solo su agenda del día.</p><a class="btn btn-gold" href="app.html" target="_blank">Abrir app de campo ↗</a></div>`;
+}
+
+// ---------- drawers ----------
+function openDrawer(html) { document.getElementById('drawer').innerHTML = html; document.getElementById('drawer').classList.add('on'); document.getElementById('drawerBg').classList.add('on'); }
+function closeDrawer() { document.getElementById('drawer').classList.remove('on'); document.getElementById('drawerBg').classList.remove('on'); ui.drawer = null; }
+
+function leadDrawer(id) {
+  const l = S.leads.find((x) => x.id === id); if (!l) return;
+  ui.drawer = ['lead', id];
+  if (l.isNew) { DB.update((s) => { const x = s.leads.find((y) => y.id === id); delete x.isNew; }); S = DB.load(); }
+  openDrawer(`
+    <div class="dh"><div><h2>${esc(l.name)}</h2><div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap">${originChip(l.origin)}<span class="chip gray">${l.channel}</span><span class="chip gray">${esc(l.phone)}</span></div></div><button class="x" data-act="close">×</button></div>
+    <div class="db">
+      <dl class="kv"><dt>Interés</dt><dd>${svcList(l.services)}</dd><dt>Valor estimado</dt><dd>${l.value ? usd(l.value) : '—'}</dd><dt>Entró</dt><dd>${fmtDate(l.createdAt, { day: 'numeric', month: 'long' })}</dd>
+      <dt>Estado</dt><dd><select class="input" style="padding:6px 8px" id="leadStatus">${['nuevo', 'contactado', 'cotizado', 'ganado', 'perdido'].map((s) => `<option ${s === l.status ? 'selected' : ''}>${s}</option>`).join('')}</select></dd></dl>
+      <div>
+        <div class="wa-head"><span class="g"></span>Conversación de WhatsApp · todo queda en el historial del cliente</div>
+        <div class="wa" id="wa">${l.messages.map((m) => `<div class="m ${m.dir}">${esc(m.text)}<time>${m.at.slice(11, 16) || ''}</time></div>`).join('') || '<div class="empty">Sin mensajes aún. Escribe el primero.</div>'}</div>
+      </div>
+      <div class="quick">
+        ${l.value ? `<button class="btn btn-ghost btn-sm" data-qr="quote">Enviar cotización (${usd(l.value)})</button>` : ''}
+        <button class="btn btn-ghost btn-sm" data-qr="member">Ofrecer membresía</button>
+        <button class="btn btn-ghost btn-sm" data-qr="photos">Pedir fotos</button>
+      </div>
+      <form class="reply" id="replyForm"><input class="input" name="t" placeholder="Escribe un mensaje…" autocomplete="off"><button class="btn btn-navy">Enviar</button></form>
+      <button class="btn btn-gold" data-act="convert" data-id="${l.id}">Convertir en cliente y agendar trabajo</button>
+    </div>`);
+  const wa = document.getElementById('wa'); wa.scrollTop = wa.scrollHeight;
+}
+
+function jobDrawer(id) {
+  const j = S.jobs.find((x) => x.id === id); if (!j) return;
+  ui.drawer = ['job', id];
+  const c = client(j.clientId);
+  const photos = j.before.length || j.after.length;
+  openDrawer(`
+    <div class="dh"><div><h2>${esc(c.name)}</h2><div class="muted sm" style="margin-top:4px">${fmtDate(j.date, { weekday: 'long', day: 'numeric', month: 'long' })} · ${j.time}</div></div><button class="x" data-act="close">×</button></div>
+    <div class="db">
+      <div style="display:flex; gap:8px; flex-wrap:wrap">${statusChip(j.status)}${j.memberId ? '<span class="chip sky">Visita de membresía</span>' : ''}</div>
+      <dl class="kv"><dt>Dirección</dt><dd>${esc(c.address)}</dd><dt>Teléfono</dt><dd>${esc(c.phone)}</dd><dt>Servicios</dt><dd>${svcList(j.services)}</dd><dt>Técnico</dt><dd><span class="dot" style="background:${tech(j.techId).color}"></span>${tech(j.techId).name}</dd>
+      <dt>Valor</dt><dd>${j.memberId && !j.amount ? 'Incluido en la membresía' : usd(j.amount)}</dd>${j.method ? `<dt>Medio de pago</dt><dd>${j.method}</dd>` : ''}${j.completedAt ? `<dt>Cerrado</dt><dd>${j.completedAt.slice(11, 16)} desde la app de campo</dd>` : ''}${j.notes ? `<dt>Notas</dt><dd>${esc(j.notes)}</dd>` : ''}</dl>
+      ${photos ? `<div><div class="sec-t">Antes y después</div><div class="ba">${j.before.map((p) => `<img src="${H.photoSrc(p)}" alt="Antes">`).join('')}${j.after.map((p) => `<img src="${H.photoSrc(p)}" alt="Después">`).join('')}</div></div>` : `<div class="muted sm">Las fotos de antes y después aparecen aquí cuando el técnico las sube desde la app.</div>`}
+      ${j.status !== 'completado' ? `<label class="field">Reasignar técnico<select class="input" id="reassign">${TECHS.map((t) => `<option value="${t.id}" ${t.id === j.techId ? 'selected' : ''}>${t.name}</option>`).join('')}</select></label>` : ''}
+      <button class="btn btn-ghost" data-client="${c.id}">Ver historial del cliente</button>
+    </div>`);
+}
+
+function clientDrawer(id) {
+  const c = S.clients.find((x) => x.id === id); if (!c) return;
+  ui.drawer = ['client', id];
+  const m = memberOf(c.id);
+  if (m && m.isNew) { DB.update((s) => { delete s.members.find((y) => y.id === m.id).isNew; }); S = DB.load(); }
+  const jobs = S.jobs.filter((j) => j.clientId === c.id).sort((a, b) => b.date.localeCompare(a.date));
+  const pays = S.payments.filter((p) => p.clientId === c.id);
+  openDrawer(`
+    <div class="dh"><div><h2>${esc(c.name)}</h2><div style="display:flex; gap:6px; margin-top:8px">${originChip(c.origin)}${m ? planChip(m.plan) : ''}</div></div><button class="x" data-act="close">×</button></div>
+    <div class="db">
+      <dl class="kv"><dt>Teléfono</dt><dd>${esc(c.phone)}</dd><dt>Email</dt><dd>${esc(c.email || '—')}</dd><dt>Dirección</dt><dd>${esc(c.address)}</dd>${c.sqft ? `<dt>Área habitable</dt><dd>${c.sqft.toLocaleString('en-US')} pie² (registro del condado)</dd>` : ''}<dt>Total pagado</dt><dd>${usd(pays.reduce((s, p) => s + p.amount, 0))}</dd></dl>
+      ${m ? `<div class="card" style="background:var(--bg)"><div class="card-head" style="margin-bottom:8px"><h3>Membresía ${PLANS[m.plan].name} · banda ${m.band}</h3><span class="chip green">Activa</span></div>
+        <div class="sm muted" style="margin-bottom:10px">${usd(m.price)}${m.billing === 'annual' ? ' al año' : ' al mes, cobro automático con Square'} · desde ${fmtDate(m.start, { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+        <table class="t sm"><tbody>${m.visits.map((v) => `<tr><td>${svc(v.svc).es}</td><td>${fmtDate(v.due)}</td><td class="num">${v.status === 'hecha' ? '<span class="chip green">Hecha</span>' : v.status === 'agendada' ? '<span class="chip sky">Agendada</span>' : `<button class="btn btn-navy btn-sm" data-sched="${m.id}|${v.id}">Agendar</button>`}</td></tr>`).join('')}</tbody></table></div>` : `<button class="btn btn-ghost" data-act="soon">Ofrecer membresía por WhatsApp</button>`}
+      <div><div class="sec-t">Historial de trabajos</div>
+        ${jobs.map((j) => `<div class="job ${j.status === 'completado' ? 'done' : ''}" data-job="${j.id}"><div style="display:flex; justify-content:space-between"><b>${fmtDate(j.date, { day: 'numeric', month: 'short', year: 'numeric' })}</b>${statusChip(j.status)}</div><div class="sm">${svcList(j.services)} · ${j.memberId ? 'Membresía' : usd(j.amount)}</div>${j.after.length ? thumbs([...j.before, ...j.after]) : ''}</div>`).join('') || '<div class="muted sm">Aún sin trabajos.</div>'}
+      </div>
+    </div>`);
+}
+
+// ---------- modals ----------
+function openModal(html) { document.getElementById('modal').innerHTML = html; document.getElementById('modalBg').classList.add('on'); }
+function closeModal() { document.getElementById('modalBg').classList.remove('on'); }
+
+function jobModal({ clientId = '', services = [], date = H.addDays(H.today(), 1), memberRef = '', title = 'Nuevo trabajo', leadId = '' } = {}) {
+  openModal(`
+    <h3>${title}</h3>
+    <form id="jobForm" style="display:grid; gap:12px">
+      <input type="hidden" name="memberRef" value="${memberRef}"><input type="hidden" name="leadId" value="${leadId}">
+      <label class="field">Cliente<select class="input" name="clientId" required ${memberRef ? 'disabled' : ''}>${S.clients.map((c) => `<option value="${c.id}" ${c.id === clientId ? 'selected' : ''}>${esc(c.name)} · ${esc(c.address)}</option>`).join('')}</select></label>
+      <div class="field">Servicios<div class="checks">${SERVICES.map((s) => `<label><input type="checkbox" name="svc" value="${s.id}" ${services.includes(s.id) ? 'checked' : ''} ${memberRef ? 'disabled' : ''}>${s.es}</label>`).join('')}</div></div>
+      <div class="row2"><label class="field">Fecha<input class="input" type="date" name="date" value="${date}" required></label><label class="field">Hora<input class="input" type="time" name="time" value="09:00" required></label></div>
+      <label class="field">Técnico<select class="input" name="techId">${TECHS.map((t) => `<option value="${t.id}">${t.name}</option>`).join('')}</select></label>
+      <label class="field">Notas para el técnico<input class="input" name="notes" placeholder="Opcional"></label>
+      <div style="display:flex; gap:8px; justify-content:flex-end"><button type="button" class="btn btn-ghost" data-act="closeModal">Cancelar</button><button class="btn btn-navy">Agendar</button></div>
+    </form>`);
+}
+
+// ---------- events ----------
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-go],[data-lead],[data-job],[data-client],[data-act],[data-lf],[data-day],[data-cday],[data-sched],[data-qr]');
+  if (!t) return;
+  const d = t.dataset;
+  if (d.act === 'share') { e.stopPropagation(); toast('Foto lista para publicar (en la versión real se descarga en formato para Instagram y TikTok).'); return; }
+  if (d.go) { ui.view = d.go; closeDrawer(); render(); window.scrollTo(0, 0); return; }
+  if (d.lead) return leadDrawer(d.lead);
+  if (d.job) return jobDrawer(d.job);
+  if (d.client) return clientDrawer(d.client);
+  if (d.lf) { ui.leadFilter = d.lf; return render(); }
+  if (d.day !== undefined) { ui.jobDate = d.day === '0' ? H.today() : H.addDays(ui.jobDate, Number(d.day)); return render(); }
+  if (d.cday !== undefined) { ui.contaDate = d.cday === '0' ? H.today() : H.addDays(ui.contaDate, Number(d.cday)); return render(); }
+  if (d.sched) {
+    const [mid, vid] = d.sched.split('|');
+    const m = S.members.find((x) => x.id === mid), v = m.visits.find((x) => x.id === vid);
+    return jobModal({ clientId: m.clientId, services: [v.svc], date: v.due < H.today() ? H.addDays(H.today(), 1) : v.due, memberRef: d.sched, title: `Agendar ${svc(v.svc).es} · membresía ${PLANS[m.plan].name}` });
+  }
+  if (d.qr) {
+    const l = S.leads.find((x) => x.id === ui.drawer[1]);
+    const lastIn = [...l.messages].reverse().find((m) => m.dir === 'in');
+    const es = lastIn ? /\b(hola|necesito|quiero|gracias|casa|me|el|la|por favor)\b/i.test(lastIn.text) : l.channel === 'Walk-in';
+    const first = l.name.split(' ')[0];
+    const text = es
+      ? { quote: `Hola ${first}, gracias por escribirnos. Para ${svcList(l.services).toLowerCase()} el valor es ${usd(l.value)}. ¿Qué día le queda bien?`, member: 'Por cierto: su casa puede quedar así todo el año desde $34 al mes con nuestra membresía. Vea su precio aquí: nearmebestwork.com/membership', photos: '¿Nos puede enviar un par de fotos del área para darle el precio exacto?' }[d.qr]
+      : { quote: `Hi ${first}, thanks for reaching out! ${l.services.map((id) => svc(id).name).join(' + ')} comes to ${usd(l.value)}. What day works best for you?`, member: 'By the way: your home can stay this clean all year from $34/month with our Best Work Membership. See your price: nearmebestwork.com/membership', photos: 'Could you send us a couple of photos of the area so we can give you an exact price?' }[d.qr];
+    document.querySelector('#replyForm input').value = text; return;
+  }
+  switch (d.act) {
+    case 'close': return closeDrawer();
+    case 'closeModal': return closeModal();
+    case 'newJob': return jobModal();
+    case 'newLead': return openModal(`<h3>Registrar lead</h3><form id="leadForm" style="display:grid; gap:12px">
+      <div class="row2"><label class="field">Nombre<input class="input" name="name" required></label><label class="field">Teléfono<input class="input" name="phone" required></label></div>
+      <div class="row2"><label class="field">Canal<select class="input" name="channel"><option>Llamada</option><option>Walk-in</option><option>WhatsApp</option></select></label><label class="field">Origen<select class="input" name="origin"><option>Orgánico</option><option>Referido</option><option>Google</option><option>Thumbtack</option></select></label></div>
+      <div class="field">Interés<div class="checks">${SERVICES.map((s) => `<label><input type="checkbox" name="svc" value="${s.id}">${s.es}</label>`).join('')}</div></div>
+      <div style="display:flex; gap:8px; justify-content:flex-end"><button type="button" class="btn btn-ghost" data-act="closeModal">Cancelar</button><button class="btn btn-navy">Guardar</button></div></form>`);
+    case 'convert': {
+      const l = S.leads.find((x) => x.id === d.id);
+      let c = S.clients.find((x) => x.name === l.name);
+      if (!c) { const cid = H.uid('c'); save((s) => { s.clients.unshift({ id: cid, name: l.name, phone: l.phone, email: '', address: 'Dirección por confirmar, Orlando, FL', sqft: null, origin: l.origin, createdAt: H.today() }); }); c = S.clients.find((x) => x.id === cid); }
+      closeDrawer();
+      return jobModal({ clientId: c.id, services: l.services, title: `Agendar trabajo · ${l.name}`, leadId: l.id });
+    }
+    case 'sendReport': save((s) => { s.reportsSent[ui.contaDate] = new Date().toISOString(); }, { kind: 'report', text: `Resumen del ${fmtDate(ui.contaDate)} enviado a la contadora` }); return toast('Resumen enviado a Patricia (simulado). En la versión real le llega por correo y lo ve en su usuario.');
+    case 'csv': {
+      const rows = [['fecha', 'tipo', 'cliente/concepto', 'medio', 'monto']];
+      S.payments.filter((p) => p.date === ui.contaDate).forEach((p) => rows.push([p.date, 'entró · ' + p.type, client(p.clientId).name, p.method, p.amount]));
+      S.expenses.filter((x) => x.date === ui.contaDate).forEach((x) => rows.push([x.date, 'salió', x.concept, '', -x.amount]));
+      const a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n')); a.download = `resumen-${ui.contaDate}.csv`; a.click(); return;
+    }
+    case 'migrate': {
+      const box = document.getElementById('mig-' + d.id), bar = box.querySelector('.progress div'); t.disabled = true; let p = 0;
+      const iv = setInterval(() => { p += 9; bar.style.width = Math.min(p, 100) + '%'; if (p >= 100) { clearInterval(iv); t.textContent = d.id === 'zoho' ? '42 clientes y 186 trabajos importados' : 'Ingresos y gastos del año importados'; toast('Importación simulada completa. En F0 se hace con los datos reales de David.'); } }, 120); return;
+    }
+    case 'soon': return toast('Disponible en la versión real.');
+  }
+});
+document.getElementById('drawerBg').onclick = closeDrawer;
+document.getElementById('modalBg').addEventListener('click', (e) => { if (e.target.id === 'modalBg') closeModal(); });
+
+document.addEventListener('submit', (e) => {
+  const f = e.target; e.preventDefault();
+  const fd = new FormData(f);
+  if (f.id === 'replyForm') {
+    const text = fd.get('t').trim(); if (!text) return;
+    const id = ui.drawer[1];
+    save((s) => { const l = s.leads.find((x) => x.id === id); l.messages.push({ dir: 'out', text, at: new Date().toISOString().slice(0, 16) }); if (l.status === 'nuevo') l.status = 'contactado'; });
+    leadDrawer(id);
+  }
+  if (f.id === 'jobForm') {
+    const memberRef = fd.get('memberRef'), leadId = fd.get('leadId');
+    let clientId = fd.get('clientId'), services = fd.getAll('svc');
+    let memberId = null;
+    if (memberRef) { const [mid, vid] = memberRef.split('|'); const m = S.members.find((x) => x.id === mid); clientId = m.clientId; services = [m.visits.find((v) => v.id === vid).svc]; memberId = mid; }
+    if (!services.length) return toast('Elige al menos un servicio.');
+    const job = { id: H.uid('j'), clientId, date: fd.get('date'), time: fd.get('time'), services, techId: fd.get('techId'), status: 'programado', amount: memberId ? 0 : services.reduce((s, id) => s + svc(id).price, 0), method: '', before: [], after: [], notes: fd.get('notes') || '', completedAt: null, memberId };
+    save((s) => {
+      s.jobs.push(job);
+      if (memberRef) { const [mid, vid] = memberRef.split('|'); const v = s.members.find((x) => x.id === mid).visits.find((x) => x.id === vid); v.status = 'agendada'; v.jobId = job.id; v.due = job.date; }
+      if (leadId) s.leads.find((x) => x.id === leadId).status = 'ganado';
+    });
+    closeModal(); closeDrawer();
+    toast(`Agendado con ${tech(job.techId).name} el ${fmtDate(job.date)} a las ${job.time}. ${job.date === H.today() ? 'Ya aparece en su app.' : ''}`);
+  }
+  if (f.id === 'leadForm') {
+    const services = fd.getAll('svc');
+    save((s) => s.leads.unshift({ id: H.uid('l'), name: fd.get('name'), phone: fd.get('phone'), channel: fd.get('channel'), origin: fd.get('origin'), status: 'nuevo', services, value: services.reduce((a, id) => a + svc(id).price, 0), createdAt: H.today(), messages: [] }), { kind: 'lead', text: `Lead registrado (${fd.get('channel')}) · ${fd.get('name')}` });
+    closeModal();
+  }
+  if (f.id === 'expForm') save((s) => s.expenses.push({ id: H.uid('e'), date: ui.contaDate, concept: fd.get('concept'), amount: Number(fd.get('amount')) }));
+});
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'jobDate') { ui.jobDate = e.target.value; render(); }
+  if (e.target.id === 'contaDate') { ui.contaDate = e.target.value; render(); }
+  if (e.target.id === 'leadStatus') { const id = ui.drawer[1]; save((s) => (s.leads.find((x) => x.id === id).status = e.target.value)); }
+  if (e.target.id === 'reassign') { const id = ui.drawer[1]; save((s) => (s.jobs.find((x) => x.id === id).techId = e.target.value)); toast('Técnico reasignado. El trabajo cambia de app al instante.'); }
+});
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'clientQ') { ui.clientQ = e.target.value; const pos = e.target.selectionStart; render(); const el = document.getElementById('clientQ'); el.focus(); el.setSelectionRange(pos, pos); }
+});
+
+// CRM pipeline: drag a lead card onto another column to change its stage.
+const STAGE_LABEL = { nuevo: 'Nuevos', contactado: 'Contactados', cotizado: 'Cotizados', ganado: 'Ganados', perdido: 'Perdidos' };
+let dragLead = null;
+document.addEventListener('dragstart', (e) => {
+  const card = e.target.closest?.('.lead[data-lead]'); if (!card) return;
+  dragLead = card.dataset.lead;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', dragLead);
+  requestAnimationFrame(() => card.classList.add('dragging'));
+});
+document.addEventListener('dragover', (e) => {
+  const col = dragLead && e.target.closest('.col[data-status]'); if (!col) return;
+  e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.col.drop-over').forEach((c) => c !== col && c.classList.remove('drop-over'));
+  col.classList.add('drop-over');
+});
+document.addEventListener('drop', (e) => {
+  const col = dragLead && e.target.closest('.col[data-status]'); if (!col) return;
+  e.preventDefault();
+  const id = dragLead, status = col.dataset.status;
+  const l = S.leads.find((x) => x.id === id);
+  dragLead = null;
+  if (!l || l.status === status) return render();
+  save((s) => { const x = s.leads.find((y) => y.id === id); x.status = status; delete x.isNew; });
+  toast(`${esc(l.name)} pasó a <b>${STAGE_LABEL[status]}</b>.${status === 'ganado' ? ' Ábrela para convertirla en cliente y agendar.' : ''}`);
+});
+document.addEventListener('dragend', () => {
+  dragLead = null;
+  document.querySelectorAll('.dragging, .drop-over').forEach((el) => el.classList.remove('dragging', 'drop-over'));
+});
+
+const roleSel = document.getElementById('role');
+roleSel.innerHTML = USERS.map((u) => `<option value="${u.id}">${u.name} · ${u.role}</option>`).join('');
+roleSel.onchange = () => { ui.role = roleSel.value; ui.view = ROLE_VIEWS[ui.role][0] || 'panel'; closeDrawer(); render(); };
+document.getElementById('resetBtn').onclick = () => { if (confirm('¿Volver a los datos de ejemplo? Se borra lo que se haya creado en la demo.')) { DB.reset(); S = DB.load(); seenEvents = new Set(); closeDrawer(); render(); toast('Demo reiniciada.'); } };
+document.getElementById('today').textContent = new Date().toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+// Live updates from the landing and the field app (other tabs).
+DB.onChange((ns) => {
+  S = ns;
+  ns.events.filter((ev) => !seenEvents.has(ev.id)).reverse().forEach((ev) => { seenEvents.add(ev.id); toast('<b>En vivo</b> · ' + esc(ev.text)); });
+  render();
+  if (ui.drawer) ({ lead: leadDrawer, job: jobDrawer, client: clientDrawer })[ui.drawer[0]]?.(ui.drawer[1]);
+});
+
+render();
+DB.ready().then(() => { S = DB.load(); seenEvents = new Set(S.events.map((e) => e.id)); render(); });
+</script>
+</body>
+</html>

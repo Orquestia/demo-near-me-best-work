@@ -84,6 +84,19 @@
   .techs { display: grid; gap: 10px; }
   .tcard { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px; cursor: pointer; font-weight: 600; }
   .tcard:hover { border-color: var(--navy); }
+  .lockic { margin-left: auto; font-size: 14px; opacity: .5; }
+  .pinbox { gap: 16px; }
+  .dots { display: flex; justify-content: center; gap: 16px; margin: 4px 0; }
+  .dots i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--navy); }
+  .dots i.on { background: var(--navy); }
+  .dots.shake { animation: shake .35s; }
+  .dots.shake i { border-color: var(--red); }
+  @keyframes shake { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+  .pin-msg { text-align: center; color: var(--red); font-size: 13.5px; font-weight: 600; min-height: 18px; margin: 0; }
+  .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 18px; }
+  .keypad button { height: 62px; border-radius: 18px; border: 1px solid var(--line); background: #fff; font-family: var(--display); font-size: 24px; font-weight: 600; color: var(--navy); cursor: pointer; }
+  .keypad button:active { background: var(--bg); }
+  .keypad button:disabled { opacity: .4; }
   .install { background: linear-gradient(90deg, var(--navy), var(--blue)); color: #fff; border-radius: 14px; padding: 12px 14px; font-size: 13px; display: flex; gap: 10px; align-items: center; }
   .install b { color: var(--gold); }
   .toast-wrap { left: 50%; right: auto; transform: translateX(-50%); bottom: 90px; }
@@ -98,15 +111,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="assets/config.js?v=3"></script>
-<script src="assets/store.js?v=3"></script>
+<script src="assets/store.js?v=4"></script>
 <script>
 const { PLANS, SERVICES, TECHS, PAY_METHODS, helpers: H } = DB;
 const { usd, esc, svc, tech, fmtDate } = H;
-const TECH_KEY = 'nmbw-demo-tech';
+// Each technician unlocks the app with their own PIN; the session lasts one workday on this phone.
+const SESSION_KEY = 'nmbw-demo-session';
+const SESSION_HOURS = 12;
+const MAX_TRIES = 3, LOCK_SECONDS = 30;
 let S = DB.load();
-const ui = { screen: 'today', jobId: null, draft: null, photoTarget: null };
+const ui = { screen: 'today', jobId: null, draft: null, photoTarget: null, pinFor: null, pin: '', tries: 0, lockedUntil: 0, pinError: '' };
 let techId = null;
-try { techId = localStorage.getItem(TECH_KEY); } catch (e) {}
+try {
+  const ses = JSON.parse(localStorage.getItem(SESSION_KEY));
+  if (ses && TECHS.some((t) => t.id === ses.techId) && Date.now() - ses.at < SESSION_HOURS * 36e5) techId = ses.techId;
+} catch (e) {}
 
 function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = '<span>' + msg + '</span>'; document.getElementById('toasts').appendChild(t); setTimeout(() => t.remove(), 3800); }
 const client = (id) => S.clients.find((c) => c.id === id) || { name: 'Cliente', address: '', phone: '' };
@@ -120,7 +139,7 @@ const ICON = {
 
 function appbar(title, sub, back) {
   const t = tech(techId);
-  return `<div class="appbar"><div class="row">${back ? `<button class="back" data-a="back">‹</button>` : ''}<div><h1>${title}</h1><small>${sub}</small></div>${techId ? `<div class="avatar" data-a="logout" title="Cambiar técnico" style="background:${t.color}">${initials(t.name)}</div>` : ''}</div>
+  return `<div class="appbar"><div class="row">${back ? `<button class="back" data-a="back">‹</button>` : ''}<div><h1>${title}</h1><small>${sub}</small></div>${techId ? `<div class="avatar" data-a="logout" title="Cerrar sesión" style="background:${t.color}">${initials(t.name)}</div>` : ''}</div>
   <div class="net ${online() ? '' : 'off'}"><i></i>${online() ? 'En línea · sincronizado con la plataforma' : 'Sin señal · se guarda y se envía al volver la conexión'}</div></div>`;
 }
 const tabbar = () => `<div class="tabbar"><button data-a="tab" data-v="today" class="${ui.screen === 'today' ? 'on' : ''}">${ICON.today}Hoy</button><button data-a="tab" data-v="summary" class="${ui.screen === 'summary' ? 'on' : ''}">${ICON.sum}Mi resumen</button></div>`;
@@ -135,9 +154,50 @@ function render() {
 }
 
 function vLogin() {
+  if (ui.pinFor) return vPin();
   return `<div class="appbar"><div class="row"><div><h1>Best Work Campo</h1><small>Near Me Best Work</small></div></div></div>
-  <div class="scroll"><div class="sec">¿Quién eres?</div><div class="techs">${TECHS.map((t) => `<div class="tcard" data-a="login" data-id="${t.id}"><div class="avatar" style="margin:0; background:${t.color}">${initials(t.name)}</div>${t.name}</div>`).join('')}</div>
-  <p class="muted" style="font-size:13px; color:var(--muted); line-height:1.5; margin:4px">En la versión real cada técnico entra con su usuario y solo ve sus trabajos.</p></div>`;
+  <div class="scroll"><div class="sec">¿Quién eres?</div><div class="techs">${TECHS.map((t) => `<div class="tcard" data-a="pick" data-id="${t.id}"><div class="avatar" style="margin:0; background:${t.color}">${initials(t.name)}</div>${t.name}<span class="lockic">🔒</span></div>`).join('')}</div>
+  <p style="font-size:13px; color:var(--muted); line-height:1.5; margin:4px">Cada técnico entra con su PIN personal y solo ve sus propios trabajos.</p></div>`;
+}
+
+function vPin() {
+  const t = tech(ui.pinFor);
+  const locked = Date.now() < ui.lockedUntil;
+  const secs = Math.ceil((ui.lockedUntil - Date.now()) / 1000);
+  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'del'];
+  return `<div class="appbar"><div class="row"><button class="back" data-a="pinBack">‹</button><div><h1>Verifica que eres tú</h1><small>${esc(t.name)}</small></div></div></div>
+  <div class="scroll pinbox">
+    <div class="avatar" style="margin:8px auto 0; width:64px; height:64px; font-size:22px; border-radius:20px; background:${t.color}">${initials(t.name)}</div>
+    <p style="text-align:center; margin:0; color:var(--muted); font-size:14px">Ingresa tu PIN de 4 dígitos</p>
+    <div class="dots ${ui.pinError ? 'shake' : ''}">${[0, 1, 2, 3].map((i) => `<i class="${i < ui.pin.length ? 'on' : ''}"></i>`).join('')}</div>
+    <p class="pin-msg">${locked ? `Demasiados intentos. Espera ${secs} s.` : esc(ui.pinError)}</p>
+    <div class="keypad">${keys.map((k) => (k === '' ? '<span></span>' : `<button data-a="${k === 'del' ? 'pinDel' : 'pinKey'}" data-k="${k}" ${locked ? 'disabled' : ''}>${k === 'del' ? '⌫' : k}</button>`)).join('')}</div>
+    <p style="text-align:center; font-size:12.5px; color:var(--muted); margin:0">¿Olvidaste tu PIN? David lo puede cambiar desde la plataforma.</p>
+  </div>`;
+}
+
+function pinKey(k) {
+  if (Date.now() < ui.lockedUntil || ui.pin.length >= 4) return;
+  ui.pin += k; ui.pinError = '';
+  render();
+  if (ui.pin.length < 4) return;
+  const t = TECHS.find((x) => x.id === ui.pinFor);
+  setTimeout(() => {
+    if (ui.pin === t.pin) {
+      techId = t.id;
+      try { localStorage.setItem(SESSION_KEY, JSON.stringify({ techId, at: Date.now() })); } catch (er) {}
+      Object.assign(ui, { pinFor: null, pin: '', tries: 0, pinError: '', screen: 'today' });
+      DB.update(() => {}, { kind: 'job', text: `${t.name.split(' ')[0]} inició sesión en la app de campo` });
+      S = DB.load();
+    } else {
+      ui.tries += 1; ui.pin = '';
+      if (ui.tries >= MAX_TRIES) {
+        ui.tries = 0; ui.lockedUntil = Date.now() + LOCK_SECONDS * 1000; ui.pinError = '';
+        const iv = setInterval(() => { if (Date.now() >= ui.lockedUntil) clearInterval(iv); render(); }, 1000);
+      } else ui.pinError = `PIN incorrecto. Te quedan ${MAX_TRIES - ui.tries} intento${MAX_TRIES - ui.tries === 1 ? '' : 's'}.`;
+    }
+    render();
+  }, 150);
 }
 
 function myJobs(date) { return S.jobs.filter((j) => j.techId === techId && j.date === date).sort((a, b) => a.time.localeCompare(b.time)); }
@@ -246,8 +306,11 @@ document.addEventListener('click', async (e) => {
   const t = e.target.closest('[data-a]'); if (!t) return;
   const a = t.dataset.a;
   const j = S.jobs.find((x) => x.id === ui.jobId);
-  if (a === 'login') { techId = t.dataset.id; try { localStorage.setItem(TECH_KEY, techId); } catch (er) {} ui.screen = 'today'; return render(); }
-  if (a === 'logout') { if (confirm('¿Cambiar de técnico?')) { techId = null; try { localStorage.removeItem(TECH_KEY); } catch (er) {} render(); } return; }
+  if (a === 'pick') { Object.assign(ui, { pinFor: t.dataset.id, pin: '', pinError: '' }); return render(); }
+  if (a === 'pinBack') { Object.assign(ui, { pinFor: null, pin: '', pinError: '' }); return render(); }
+  if (a === 'pinKey') return pinKey(t.dataset.k);
+  if (a === 'pinDel') { ui.pin = ui.pin.slice(0, -1); return render(); }
+  if (a === 'logout') { if (confirm('¿Cerrar sesión? Para volver a entrar se pide el PIN.')) { techId = null; try { localStorage.removeItem(SESSION_KEY); } catch (er) {} ui.screen = 'today'; render(); } return; }
   if (a === 'tab') { ui.screen = t.dataset.v; return render(); }
   if (a === 'back') { ui.screen = 'today'; return render(); }
   if (a === 'open') { ui.jobId = t.dataset.id; ui.draft = newDraft(S.jobs.find((x) => x.id === ui.jobId)); ui.screen = 'job'; render(); document.querySelector('.scroll').scrollTop = 0; return; }
@@ -301,6 +364,11 @@ function finish(j) {
 }
 
 DB.onChange((ns) => { S = ns; if (ui.screen !== 'job') render(); });
+document.addEventListener('keydown', (e) => {
+  if (!ui.pinFor || techId) return;
+  if (/^\d$/.test(e.key)) pinKey(e.key);
+  else if (e.key === 'Backspace') { ui.pin = ui.pin.slice(0, -1); render(); }
+});
 window.addEventListener('online', render); window.addEventListener('offline', render);
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
 render();

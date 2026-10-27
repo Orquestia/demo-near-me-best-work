@@ -44,11 +44,12 @@
     { id: 'XL', label: 'Over 3,500 sq ft', max: Infinity },
   ];
 
+  // Demo PINs for the field app; the real build uses Supabase Auth with one account per technician.
   const TECHS = [
-    { id: 't1', name: 'Carlos Ramírez', color: '#1A3D6E' },
-    { id: 't2', name: 'Luis Herrera', color: '#D4A72C' },
-    { id: 't3', name: 'Miguel Torres', color: '#5DBA47' },
-    { id: 't4', name: 'José Pérez', color: '#6EC1E4' },
+    { id: 't1', name: 'Carlos Ramírez', pin: '2580', color: '#1A3D6E' },
+    { id: 't2', name: 'Luis Herrera', pin: '1470', color: '#D4A72C' },
+    { id: 't3', name: 'Miguel Torres', pin: '3690', color: '#5DBA47' },
+    { id: 't4', name: 'José Pérez', pin: '7410', color: '#6EC1E4' },
   ];
 
   const USERS = [

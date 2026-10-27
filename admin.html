@@ -104,6 +104,44 @@
   .filters button.on { background: var(--navy); border-color: var(--navy); color: #fff; }
 
   .board { display: grid; grid-template-columns: repeat(4, minmax(230px, 1fr)); gap: 14px; overflow-x: auto; }
+  .seg { display: flex; gap: 4px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+  .seg button { border: 0; background: none; padding: 6px 12px; border-radius: 7px; font-weight: 600; font-size: 13px; color: var(--muted); cursor: pointer; }
+  .seg button.on { background: var(--navy); color: #fff; }
+  .cal { display: grid; grid-template-rows: 46px auto; align-content: start; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: auto; max-height: calc(100vh - 250px); position: relative; }
+  .cal-corner, .cal-head { position: sticky; top: 0; z-index: 3; background: #fff; border-bottom: 1px solid var(--line); }
+  .cal-head { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 8px; font-size: 13px; font-weight: 600; color: var(--navy); border-left: 1px solid var(--line); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cal-head[data-calgo] { cursor: pointer; }
+  .cal-head[data-calgo]:hover { background: var(--bg); }
+  .cal-head .wd { text-transform: capitalize; color: var(--muted); font-weight: 500; }
+  .cal-head .dn { font-family: var(--display); font-size: 16px; }
+  .cal-head.today .dn { background: var(--gold); color: var(--navy); border-radius: 999px; padding: 1px 8px; }
+  .cal-hours div { font-size: 11px; color: var(--muted); text-align: right; padding: 0 8px; transform: translateY(-7px); }
+  .cal-hours div:first-child { transform: none; }
+  .cal-col { position: relative; border-left: 1px solid var(--line); }
+  .slot { position: absolute; left: 0; right: 0; border-top: 1px solid #f1f5f9; cursor: copy; }
+  .slot:hover { background: #f8fafc; }
+  .now-line { position: absolute; left: 0; right: 0; height: 2px; background: var(--red); z-index: 2; pointer-events: none; }
+  .now-line::before { content: ''; position: absolute; left: -4px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+  .ev { position: absolute; z-index: 1; border-left: 3px solid; border-radius: 8px; padding: 4px 7px; font-size: 12px; line-height: 1.3; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; gap: 1px; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+  .ev:hover { box-shadow: var(--shadow); z-index: 4; }
+  .ev.done { opacity: .62; }
+  .ev b { font-size: 11.5px; color: var(--navy); }
+  .ev-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ev-sub { color: var(--muted); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .month { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .mh { padding: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--line); text-align: center; }
+  .mc { min-height: 104px; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; padding: 6px; cursor: pointer; display: grid; gap: 3px; align-content: start; }
+  .mc:hover { background: #f8fafc; }
+  .mc.out { background: #fafbfc; color: #cbd5e1; }
+  .mn { font-size: 12.5px; font-weight: 600; }
+  .mc.today .mn { background: var(--gold); color: var(--navy); border-radius: 999px; width: 24px; height: 24px; display: grid; place-items: center; }
+  .mchip { font-size: 11.5px; border-left: 3px solid; background: #f1f5f9; border-radius: 5px; padding: 2px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); }
+  .more { font-size: 11.5px; color: var(--muted); padding-left: 4px; }
+  .filters button .dot { margin-right: 4px; }
+  .pinrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .pinval { color: var(--navy); font-family: var(--display); letter-spacing: .12em; min-width: 46px; }
+  .pin-input { font-family: var(--display); font-size: 22px; letter-spacing: .5em; text-align: center; }
+  .form-err { color: var(--red); font-size: 13px; font-weight: 600; min-height: 16px; margin: 0; }
   .job { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--blue); border-radius: 11px; padding: 12px; margin-bottom: 9px; cursor: pointer; display: grid; gap: 6px; font-size: 13.5px; }
   .job:hover { box-shadow: var(--shadow); }
   .job.done { border-left-color: var(--green); }
@@ -208,7 +246,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="assets/config.js?v=3"></script>
-<script src="assets/store.js?v=4"></script>
+<script src="assets/store.js?v=5"></script>
 <script>
 const { PLANS, SERVICES, TECHS, USERS, PAY_METHODS, helpers: H } = DB;
 const { usd, esc, svc, tech, fmtDate } = H;
@@ -249,7 +287,7 @@ const ROLE_VIEWS = {
   tech: [],
 };
 
-const ui = { view: 'panel', role: 'owner', leadFilter: 'Todos', jobDate: H.today(), contaDate: H.today(), clientQ: '' };
+const ui = { view: 'panel', role: 'owner', leadFilter: 'Todos', jobDate: H.today(), calMode: 'semana', calTech: 'all', contaDate: H.today(), clientQ: '' };
 let S = DB.load();
 let seenEvents = new Set(S.events.map((e) => e.id));
 
@@ -402,32 +440,90 @@ function vCrm() {
   }).join('')}</div>`;
 }
 
+// ---------- agenda calendar ----------
+const DAY_START = 7, DAY_END = 19, HOUR_PX = 56;
+const SVC_HOURS = { house: 2, driveway: 1, roof: 3, pool: 1.5, paver: 3, fence: 1.5, screen: 2 };
+const jobHours = (j) => Math.min(6, Math.max(1, j.services.reduce((h, id) => h + (SVC_HOURS[id] || 1), 0)));
+const toHours = (t) => { const [h, m] = t.split(':').map(Number); return h + m / 60; };
+const fmtHour = (h) => `${String(Math.floor(h)).padStart(2, '0')}:${String(Math.round((h % 1) * 60)).padStart(2, '0')}`;
+const weekStart = (d) => { const x = new Date(d + 'T12:00:00'); const dow = (x.getDay() + 6) % 7; return H.addDays(d, -dow); };
+const calJobs = () => S.jobs.filter((j) => ui.calTech === 'all' || j.techId === ui.calTech);
+
+// Side-by-side lanes for jobs that overlap in the same column.
+function layoutLanes(jobs) {
+  const items = jobs.map((j) => ({ j, a: toHours(j.time), b: toHours(j.time) + jobHours(j) })).sort((x, y) => x.a - y.a);
+  let cluster = [], clusterEnd = -1;
+  const flush = () => { const lanes = []; cluster.forEach((it) => { let k = lanes.findIndex((end) => end <= it.a); if (k < 0) { k = lanes.length; lanes.push(0); } lanes[k] = it.b; it.lane = k; }); cluster.forEach((it) => (it.lanes = lanes.length)); };
+  items.forEach((it) => { if (it.a >= clusterEnd && cluster.length) { flush(); cluster = []; } cluster.push(it); clusterEnd = Math.max(clusterEnd, it.b); });
+  if (cluster.length) flush();
+  return items;
+}
+
+function calEvent(it, showTech) {
+  const { j } = it, t = tech(j.techId), c = client(j.clientId);
+  const top = (Math.max(it.a, DAY_START) - DAY_START) * HOUR_PX, height = Math.max(26, (Math.min(it.b, DAY_END) - Math.max(it.a, DAY_START)) * HOUR_PX - 4);
+  const w = 100 / it.lanes;
+  const icon = j.status === 'completado' ? '✓ ' : j.status === 'en_curso' ? '● ' : '';
+  return `<div class="ev ${j.status === 'completado' ? 'done' : ''}" data-job="${j.id}" title="${esc(c.name)} · ${svcList(j.services)}" style="top:${top}px; height:${height}px; left:calc(${it.lane * w}% + 3px); width:calc(${w}% - 6px); background:${t.color}1f; border-left-color:${t.color}">
+    <b>${icon}${fmtHour(it.a)}–${fmtHour(it.b)}</b><span class="ev-name">${esc(c.name)}${j.memberId ? ' ★' : ''}</span>
+    ${height > 60 ? `<span class="ev-sub">${svcList(j.services)}</span>` : ''}${showTech && height > 86 ? `<span class="ev-sub">${t.name.split(' ')[0]}</span>` : ''}</div>`;
+}
+
+function timeGrid(columns, minCol = 150) {
+  const hours = []; for (let h = DAY_START; h < DAY_END; h++) hours.push(h);
+  const T = H.today(), nowH = new Date().getHours() + new Date().getMinutes() / 60;
+  return `<div class="cal" style="grid-template-columns:58px repeat(${columns.length}, minmax(${minCol}px, 1fr))">
+    <div class="cal-corner"></div>${columns.map((c) => `<div class="cal-head ${c.today ? 'today' : ''}" ${c.go ? `data-calgo="${c.go}"` : ''}>${c.head}</div>`).join('')}
+    <div class="cal-hours">${hours.map((h) => `<div style="height:${HOUR_PX}px">${String(h).padStart(2, '0')}:00</div>`).join('')}</div>
+    ${columns.map((c) => `<div class="cal-col" style="height:${(DAY_END - DAY_START) * HOUR_PX}px">
+      ${hours.map((h) => `<div class="slot" style="top:${(h - DAY_START) * HOUR_PX}px; height:${HOUR_PX}px" data-slot="${c.date}|${String(h).padStart(2, '0')}:00|${c.techId || ''}"></div>`).join('')}
+      ${c.date === T && nowH > DAY_START && nowH < DAY_END ? `<div class="now-line" style="top:${(nowH - DAY_START) * HOUR_PX}px"></div>` : ''}
+      ${layoutLanes(c.jobs).map((it) => calEvent(it, c.showTech)).join('')}
+    </div>`).join('')}
+  </div>`;
+}
+
 function vTrabajos() {
-  const d = ui.jobDate;
-  const jobs = S.jobs.filter((j) => j.date === d).sort((a, b) => a.time.localeCompare(b.time));
-  const total = jobs.reduce((s, j) => s + (j.memberId ? 0 : j.amount), 0);
+  const d = ui.jobDate, mode = ui.calMode, T = H.today();
+  let title, body, inRange;
+  if (mode === 'dia') {
+    const techs = TECHS.filter((t) => ui.calTech === 'all' || t.id === ui.calTech);
+    const dayJobs = calJobs().filter((j) => j.date === d);
+    inRange = dayJobs;
+    title = fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    body = timeGrid(techs.map((t) => ({ date: d, techId: t.id, today: d === T, head: `<span class="dot" style="background:${t.color}"></span>${t.name} <span class="muted">${dayJobs.filter((j) => j.techId === t.id).length}</span>`, jobs: dayJobs.filter((j) => j.techId === t.id) })));
+  } else if (mode === 'semana') {
+    const ws = weekStart(d), days = [0, 1, 2, 3, 4, 5, 6].map((i) => H.addDays(ws, i));
+    inRange = calJobs().filter((j) => j.date >= days[0] && j.date <= days[6]);
+    title = `${fmtDate(days[0], { day: 'numeric', month: 'short' })} – ${fmtDate(days[6], { day: 'numeric', month: 'short', year: 'numeric' })}`;
+    body = timeGrid(days.map((day) => ({ date: day, today: day === T, go: day, showTech: true, head: `<span class="wd">${fmtDate(day, { weekday: 'short' })}</span> <span class="dn">${Number(day.slice(8))}</span>`, jobs: inRange.filter((j) => j.date === day) })), 112);
+  } else {
+    const first = d.slice(0, 8) + '01', gs = weekStart(first);
+    const cells = Array.from({ length: 42 }, (_, i) => H.addDays(gs, i));
+    inRange = calJobs().filter((j) => j.date.slice(0, 7) === d.slice(0, 7));
+    title = fmtDate(first, { month: 'long', year: 'numeric' });
+    body = `<div class="month">${['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'].map((w) => `<div class="mh">${w}</div>`).join('')}
+      ${cells.map((day) => { const js = calJobs().filter((j) => j.date === day).sort((a, b) => a.time.localeCompare(b.time)); return `<div class="mc ${day.slice(0, 7) !== d.slice(0, 7) ? 'out' : ''} ${day === T ? 'today' : ''}" data-calgo="${day}"><div class="mn">${Number(day.slice(8))}</div>
+        ${js.slice(0, 3).map((j) => `<div class="mchip" data-job="${j.id}" style="border-left-color:${tech(j.techId).color}">${j.time} ${esc(client(j.clientId).name.split(' ')[0])}</div>`).join('')}${js.length > 3 ? `<div class="more">+${js.length - 3} más</div>` : ''}</div>`; }).join('')}</div>`;
+  }
+  const total = inRange.reduce((s, j) => s + (j.memberId ? 0 : j.amount), 0);
   return `
   <div class="card-head" style="margin:0">
-    <div style="display:flex; gap:8px; align-items:center">
-      <button class="btn btn-ghost btn-sm" data-day="-1">‹</button>
-      <input type="date" class="input" style="width:auto; padding:7px 10px" id="jobDate" value="${d}">
-      <button class="btn btn-ghost btn-sm" data-day="1">›</button>
-      <button class="btn btn-ghost btn-sm" data-day="0">Hoy</button>
-      <span class="muted sm" style="margin-left:8px">${jobs.length} trabajos · ${usd(total)}</span>
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" data-calnav="-1">‹</button>
+      <button class="btn btn-ghost btn-sm" data-calnav="0">Hoy</button>
+      <button class="btn btn-ghost btn-sm" data-calnav="1">›</button>
+      <h3 style="color:var(--navy); font-size:17px; margin-left:6px; text-transform:capitalize">${title}</h3>
+      <span class="muted sm">${inRange.length} trabajos · ${usd(total)}</span>
     </div>
-    <button class="btn btn-navy btn-sm" data-act="newJob">+ Nuevo trabajo</button>
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+      <div class="seg">${[['dia', 'Día'], ['semana', 'Semana'], ['mes', 'Mes']].map(([k, l]) => `<button data-calmode="${k}" class="${mode === k ? 'on' : ''}">${l}</button>`).join('')}</div>
+      <button class="btn btn-navy btn-sm" data-act="newJob">+ Nuevo trabajo</button>
+    </div>
   </div>
-  <div class="board">${TECHS.map((t) => {
-    const tj = jobs.filter((j) => j.techId === t.id);
-    return `<div class="col"><h4><span><span class="dot" style="background:${t.color}"></span>${t.name}</span><span>${tj.length}</span></h4>${tj.map((j) => `
-      <div class="job ${j.status === 'completado' ? 'done' : j.status === 'en_curso' ? 'prog' : ''}" data-job="${j.id}">
-        <div style="display:flex; justify-content:space-between"><b>${j.time} · ${esc(client(j.clientId).name)}</b></div>
-        <div class="muted sm">${esc(client(j.clientId).address)}</div>
-        <div class="sm">${svcList(j.services)}</div>
-        <div style="display:flex; justify-content:space-between; align-items:center">${statusChip(j.status)}<span class="sm" style="font-weight:600">${j.memberId ? 'Membresía' : usd(j.amount)}</span></div>
-        ${j.after.length ? thumbs([...j.before, ...j.after]) : ''}
-      </div>`).join('') || '<div class="muted sm" style="padding:6px">Libre</div>'}</div>`;
-  }).join('')}</div>`;
+  <div class="filters"><button data-caltech="all" class="${ui.calTech === 'all' ? 'on' : ''}">Todos los técnicos</button>${TECHS.map((t) => `<button data-caltech="${t.id}" class="${ui.calTech === t.id ? 'on' : ''}"><span class="dot" style="background:${t.color}"></span>${t.name.split(' ')[0]}</button>`).join('')}
+    <span class="muted sm" style="align-self:center; margin-left:8px">${mode === 'mes' ? 'Clic en un día para verlo por horas.' : 'Clic en un espacio libre para agendar ahí. ★ = visita de membresía.'}</span></div>
+  ${body}`;
 }
 
 function vClientes() {
@@ -551,9 +647,9 @@ function vConfig() {
       <div class="card-head"><h3>Usuarios y roles</h3><button class="btn btn-ghost btn-sm" data-act="soon">+ Invitar</button></div>
       <table class="t"><thead><tr><th>Usuario</th><th>Rol</th><th>Ve</th></tr></thead><tbody>
       ${USERS.map((u) => `<tr><td><b>${u.name}</b></td><td><span class="chip ${u.id === 'owner' ? 'gold' : 'gray'}">${u.role}</span></td><td class="sm muted">${u.access}</td></tr>`).join('')}
-      ${TECHS.map((t) => `<tr><td><span class="dot" style="background:${t.color}"></span>${t.name}</td><td><span class="chip gray">Técnico</span></td><td class="sm muted">App de campo · PIN <b style="color:var(--navy)">${t.pin}</b></td></tr>`).join('')}
+      ${TECHS.map((t) => `<tr><td><span class="dot" style="background:${t.color}"></span>${t.name}</td><td><span class="chip gray">Técnico</span></td><td class="sm muted"><div class="pinrow">App de campo · PIN <b class="pinval">${ui.showPins ? H.techPin(S, t.id) : '••••'}</b>${ui.role === 'owner' ? `<button class="btn btn-ghost btn-sm" data-act="changePin" data-id="${t.id}">Cambiar PIN</button>` : ''}</div>${H.pinChangedAt(S, t.id) ? `<div class="sm muted">Cambiado ${timeAgo(H.pinChangedAt(S, t.id))}</div>` : ''}</td></tr>`).join('')}
       </tbody></table>
-      <p class="muted sm">Prueba el selector “Entrar como”: cada rol ve solo su parte. Cada técnico entra a la app de campo con su PIN y solo ve sus trabajos.</p>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px"><p class="muted sm" style="margin:0">Cada técnico entra a la app de campo con su PIN y solo ve sus trabajos. Solo David puede ver y cambiar los PIN.</p><button class="btn btn-ghost btn-sm" data-act="togglePins">${ui.showPins ? 'Ocultar PIN' : 'Ver PIN'}</button></div>
     </div>
     <div class="card">
       <div class="card-head"><h3>Servicios y precios publicados</h3></div>
@@ -655,15 +751,15 @@ function clientDrawer(id) {
 function openModal(html) { document.getElementById('modal').innerHTML = html; document.getElementById('modalBg').classList.add('on'); }
 function closeModal() { document.getElementById('modalBg').classList.remove('on'); }
 
-function jobModal({ clientId = '', services = [], date = H.addDays(H.today(), 1), memberRef = '', title = 'Nuevo trabajo', leadId = '' } = {}) {
+function jobModal({ clientId = '', services = [], date = H.addDays(H.today(), 1), time = '09:00', techId = '', memberRef = '', title = 'Nuevo trabajo', leadId = '' } = {}) {
   openModal(`
     <h3>${title}</h3>
     <form id="jobForm" style="display:grid; gap:12px">
       <input type="hidden" name="memberRef" value="${memberRef}"><input type="hidden" name="leadId" value="${leadId}">
       <label class="field">Cliente<select class="input" name="clientId" required ${memberRef ? 'disabled' : ''}>${S.clients.map((c) => `<option value="${c.id}" ${c.id === clientId ? 'selected' : ''}>${esc(c.name)} · ${esc(c.address)}</option>`).join('')}</select></label>
       <div class="field">Servicios<div class="checks">${SERVICES.map((s) => `<label><input type="checkbox" name="svc" value="${s.id}" ${services.includes(s.id) ? 'checked' : ''} ${memberRef ? 'disabled' : ''}>${s.es}</label>`).join('')}</div></div>
-      <div class="row2"><label class="field">Fecha<input class="input" type="date" name="date" value="${date}" required></label><label class="field">Hora<input class="input" type="time" name="time" value="09:00" required></label></div>
-      <label class="field">Técnico<select class="input" name="techId">${TECHS.map((t) => `<option value="${t.id}">${t.name}</option>`).join('')}</select></label>
+      <div class="row2"><label class="field">Fecha<input class="input" type="date" name="date" value="${date}" required></label><label class="field">Hora<input class="input" type="time" name="time" value="${time}" required></label></div>
+      <label class="field">Técnico<select class="input" name="techId">${TECHS.map((t) => `<option value="${t.id}" ${t.id === techId ? 'selected' : ''}>${t.name}</option>`).join('')}</select></label>
       <label class="field">Notas para el técnico<input class="input" name="notes" placeholder="Opcional"></label>
       <div style="display:flex; gap:8px; justify-content:flex-end"><button type="button" class="btn btn-ghost" data-act="closeModal">Cancelar</button><button class="btn btn-navy">Agendar</button></div>
     </form>`);
@@ -671,7 +767,7 @@ function jobModal({ clientId = '', services = [], date = H.addDays(H.today(), 1)
 
 // ---------- events ----------
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-go],[data-lead],[data-job],[data-client],[data-act],[data-lf],[data-day],[data-cday],[data-sched],[data-qr]');
+  const t = e.target.closest('[data-go],[data-lead],[data-job],[data-client],[data-act],[data-lf],[data-day],[data-cday],[data-sched],[data-qr],[data-calnav],[data-calmode],[data-caltech],[data-calgo],[data-slot]');
   if (!t) return;
   const d = t.dataset;
   if (d.act === 'share') { e.stopPropagation(); toast('Foto lista para publicar (en la versión real se descarga en formato para Instagram y TikTok).'); return; }
@@ -680,6 +776,18 @@ document.addEventListener('click', (e) => {
   if (d.job) return jobDrawer(d.job);
   if (d.client) return clientDrawer(d.client);
   if (d.lf) { ui.leadFilter = d.lf; return render(); }
+  if (d.calmode) { ui.calMode = d.calmode; return render(); }
+  if (d.caltech) { ui.calTech = d.caltech; return render(); }
+  if (d.calgo) { ui.jobDate = d.calgo; ui.calMode = 'dia'; return render(); }
+  if (d.calnav !== undefined) {
+    const n = Number(d.calnav);
+    if (n === 0) ui.jobDate = H.today();
+    else if (ui.calMode === 'dia') ui.jobDate = H.addDays(ui.jobDate, n);
+    else if (ui.calMode === 'semana') ui.jobDate = H.addDays(ui.jobDate, 7 * n);
+    else { const x = new Date(ui.jobDate.slice(0, 8) + '01T12:00:00'); x.setMonth(x.getMonth() + n); ui.jobDate = H.iso(x); }
+    return render();
+  }
+  if (d.slot) { const [date, time, techId] = d.slot.split('|'); return jobModal({ date, time, techId, title: `Nuevo trabajo · ${fmtDate(date, { weekday: 'long', day: 'numeric', month: 'short' })} ${time}` }); }
   if (d.day !== undefined) { ui.jobDate = d.day === '0' ? H.today() : H.addDays(ui.jobDate, Number(d.day)); return render(); }
   if (d.cday !== undefined) { ui.contaDate = d.cday === '0' ? H.today() : H.addDays(ui.contaDate, Number(d.cday)); return render(); }
   if (d.sched) {
@@ -725,6 +833,25 @@ document.addEventListener('click', (e) => {
       const iv = setInterval(() => { p += 9; bar.style.width = Math.min(p, 100) + '%'; if (p >= 100) { clearInterval(iv); t.textContent = d.id === 'zoho' ? '42 clientes y 186 trabajos importados' : 'Ingresos y gastos del año importados'; toast('Importación simulada completa. En F0 se hace con los datos reales de David.'); } }, 120); return;
     }
     case 'soon': return toast('Disponible en la versión real.');
+    case 'togglePins': ui.showPins = !ui.showPins; return render();
+    case 'changePin': {
+      if (ui.role !== 'owner') return toast('Solo David puede cambiar los PIN.');
+      const tt = tech(d.id);
+      return openModal(`<h3>Cambiar PIN · ${esc(tt.name)}</h3>
+        <p class="muted sm" style="margin:0; line-height:1.5">El PIN anterior deja de funcionar al guardar y ${esc(tt.name.split(' ')[0])} tendrá que volver a entrar a la app con el nuevo.</p>
+        <form id="pinForm" style="display:grid; gap:12px" autocomplete="off">
+          <input type="hidden" name="techId" value="${d.id}">
+          <div class="row2"><label class="field">PIN nuevo<input class="input pin-input" name="pin" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" required></label><label class="field">Confirmar PIN<input class="input pin-input" name="pin2" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" required></label></div>
+          <button type="button" class="btn btn-ghost btn-sm" data-act="randomPin" style="justify-self:start">Generar uno al azar</button>
+          <p class="form-err" id="pinErr"></p>
+          <div style="display:flex; gap:8px; justify-content:flex-end"><button type="button" class="btn btn-ghost" data-act="closeModal">Cancelar</button><button class="btn btn-navy">Guardar PIN</button></div>
+        </form>`);
+    }
+    case 'randomPin': {
+      const used = TECHS.map((x) => H.techPin(S, x.id));
+      let p; do { p = String(Math.floor(Math.random() * 10000)).padStart(4, '0'); } while (used.includes(p) || /^(\d)\1{3}$/.test(p));
+      const f = document.getElementById('pinForm'); f.pin.value = p; f.pin2.value = p; f.pin.type = 'text'; return;
+    }
   }
 });
 document.getElementById('drawerBg').onclick = closeDrawer;
@@ -758,6 +885,19 @@ document.addEventListener('submit', (e) => {
     const services = fd.getAll('svc');
     save((s) => s.leads.unshift({ id: H.uid('l'), name: fd.get('name'), phone: fd.get('phone'), channel: fd.get('channel'), origin: fd.get('origin'), status: 'nuevo', services, value: services.reduce((a, id) => a + svc(id).price, 0), createdAt: H.today(), messages: [] }), { kind: 'lead', text: `Lead registrado (${fd.get('channel')}) · ${fd.get('name')}` });
     closeModal();
+  }
+  if (f.id === 'pinForm') {
+    const id = fd.get('techId'), pin = fd.get('pin').trim(), err = document.getElementById('pinErr');
+    const others = TECHS.filter((x) => x.id !== id).map((x) => H.techPin(S, x.id));
+    if (!/^\d{4}$/.test(pin)) { err.textContent = 'El PIN debe tener exactamente 4 números.'; return; }
+    if (pin !== fd.get('pin2').trim()) { err.textContent = 'Los dos PIN no coinciden.'; return; }
+    if (/^(\d)\1{3}$/.test(pin) || pin === '1234') { err.textContent = 'Ese PIN es muy fácil de adivinar.'; return; }
+    if (pin === H.techPin(S, id)) { err.textContent = 'Es el mismo PIN de ahora.'; return; }
+    if (others.includes(pin)) { err.textContent = 'Otro técnico ya usa ese PIN.'; return; }
+    const name = tech(id).name;
+    save((s) => { s.pins = s.pins || {}; s.pins[id] = { pin, changedAt: new Date().toISOString() }; }, { kind: 'report', text: `David cambió el PIN de ${name}` });
+    closeModal();
+    toast(`PIN de ${esc(name.split(' ')[0])} actualizado. Si tenía la app abierta, se le cerró la sesión.`);
   }
   if (f.id === 'expForm') save((s) => s.expenses.push({ id: H.uid('e'), date: ui.contaDate, concept: fd.get('concept'), amount: Number(fd.get('amount')) }));
 });

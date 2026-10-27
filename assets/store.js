@@ -74,6 +74,10 @@
   const fmtDate = (s, opts) => new Date(s + 'T12:00:00').toLocaleDateString('es-CO', opts || { day: 'numeric', month: 'short' });
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+  // Current PIN for a technician: the one David set in the platform, or the seeded default.
+  const techPin = (s, id) => (s.pins && s.pins[id] && s.pins[id].pin) || (TECHS.find((t) => t.id === id) || {}).pin;
+  const pinChangedAt = (s, id) => (s.pins && s.pins[id] && s.pins[id].changedAt) || null;
+
   function priceFor(planId, band, billing) {
     const p = PLANS[planId];
     if (billing === 'annual') return p.annual[band] ?? null;
@@ -227,7 +231,8 @@
       createdAt: addDays(T, -Math.floor(i / 2)), messages: msgs.map(([dir, text], k) => ({ dir, text, at: addDays(T, -Math.floor(i / 2)) + `T${pad(9 + k)}:1${k}` })),
     }));
 
-    return { version: 2, seededAt: T, clients, jobs, payments, expenses, members, leads, reportsSent: {}, events: [] };
+    const pins = Object.fromEntries(TECHS.map((t) => [t.id, { pin: t.pin, changedAt: null }]));
+    return { version: 2, seededAt: T, clients, jobs, payments, expenses, members, leads, pins, reportsSent: {}, events: [] };
   }
 
   // ---------- persistence ----------
@@ -392,6 +397,6 @@
   window.DB = {
     SERVICES, PLANS, BANDS, TECHS, USERS, PAY_METHODS,
     load, ready, update, reset, onChange, uploadPhoto, online: () => !!sb,
-    helpers: { iso, today, addDays, uid, usd, svc, tech, bandFor, priceFor, lookupAddress, photoSrc, fmtDate, esc, compressImage },
+    helpers: { iso, today, addDays, uid, usd, svc, tech, bandFor, priceFor, lookupAddress, photoSrc, fmtDate, esc, compressImage, techPin, pinChangedAt },
   };
 })();

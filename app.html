@@ -111,7 +111,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="assets/config.js?v=3"></script>
-<script src="assets/store.js?v=4"></script>
+<script src="assets/store.js?v=5"></script>
 <script>
 const { PLANS, SERVICES, TECHS, PAY_METHODS, helpers: H } = DB;
 const { usd, esc, svc, tech, fmtDate } = H;
@@ -183,7 +183,7 @@ function pinKey(k) {
   if (ui.pin.length < 4) return;
   const t = TECHS.find((x) => x.id === ui.pinFor);
   setTimeout(() => {
-    if (ui.pin === t.pin) {
+    if (ui.pin === H.techPin(S, t.id)) {
       techId = t.id;
       try { localStorage.setItem(SESSION_KEY, JSON.stringify({ techId, at: Date.now() })); } catch (er) {}
       Object.assign(ui, { pinFor: null, pin: '', tries: 0, pinError: '', screen: 'today' });
@@ -363,7 +363,19 @@ function finish(j) {
   ui.screen = 'done'; render();
 }
 
-DB.onChange((ns) => { S = ns; if (ui.screen !== 'job') render(); });
+// If David changes this technician's PIN, the open session ends and the new PIN is required.
+function checkSession() {
+  if (!techId) return;
+  let ses = null; try { ses = JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) {}
+  const changed = H.pinChangedAt(S, techId);
+  if (ses && changed && new Date(changed).getTime() > ses.at) {
+    techId = null; try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+    Object.assign(ui, { screen: 'today', jobId: null, draft: null });
+    render();
+    toast('David cambió tu PIN. Entra con el PIN nuevo.');
+  }
+}
+DB.onChange((ns) => { S = ns; checkSession(); if (techId && ui.screen === 'job') return; render(); });
 document.addEventListener('keydown', (e) => {
   if (!ui.pinFor || techId) return;
   if (/^\d$/.test(e.key)) pinKey(e.key);
@@ -372,7 +384,7 @@ document.addEventListener('keydown', (e) => {
 window.addEventListener('online', render); window.addEventListener('offline', render);
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
 render();
-DB.ready().then(() => { S = DB.load(); if (ui.screen !== 'job') render(); });
+DB.ready().then(() => { S = DB.load(); checkSession(); if (ui.screen !== 'job') render(); });
 </script>
 </body>
 </html>

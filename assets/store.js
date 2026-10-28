@@ -3,6 +3,7 @@
    field PWA share one fictitious database and update each other live. */
 (function () {
   const KEY = 'nmbw-demo-v3';
+  const VERSION = 3; // bump when the seed's shape changes: older shared data is replaced
 
   const SERVICES = [
     { id: 'house', name: 'House Soft Wash', es: 'Lavado de casa (soft wash)', price: 249 },
@@ -114,6 +115,88 @@
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
   }
 
+
+  // ---------- WhatsApp sales assistant ----------
+  // It asks a few strategic questions, scores the chance of closing and the urgency,
+  // and proposes David's next task. Points per answer add up to the probability.
+  const QUAL = [
+    { id: 'timing', label: 'Para cuándo', es: '¿Para cuándo necesita el servicio?', en: 'When do you need the service done?',
+      opts: [['week', 'Esta semana', 'This week', 25], ['month', 'Este mes', 'This month', 14], ['later', 'Solo está cotizando', 'Just getting quotes', 3]] },
+    { id: 'reason', label: 'Motivo', es: '¿Hay algo que lo motive ahora? Por ejemplo un aviso de la HOA, vender la casa o una visita.', en: 'Is anything driving it right now? For example an HOA notice, selling the home or guests coming.',
+      opts: [['hoa', 'Aviso de la HOA', 'HOA notice', 15], ['sale', 'Va a vender o rentar', 'Selling or renting', 15], ['event', 'Visita o evento', 'Guests or an event', 10], ['none', 'Mantenimiento', 'Just maintenance', 4]] },
+    { id: 'decider', label: 'Decisión', es: '¿Usted es el dueño y quien toma la decisión?', en: 'Are you the owner and the one who decides?',
+      opts: [['yes', 'Sí, decide él/ella', "Yes, it's my call", 15], ['shared', 'Lo consulta con su pareja', 'Need to check with my partner', 6], ['tenant', 'Es inquilino', "I'm renting", 0]] },
+    { id: 'compare', label: 'Competencia', es: '¿Está comparando con otras empresas?', en: 'Are you comparing with other companies?',
+      opts: [['no', 'No, quiere resolverlo', 'No, I just want it done', 14], ['few', 'Con una o dos', 'Yes, one or two', 7], ['many', 'Con varias', 'Yes, several', 2]] },
+    { id: 'recurring', label: 'Plan anual', es: '¿Le gustaría que su casa quede así todo el año con un plan mensual?', en: 'Would you like your home to stay this clean all year with a monthly plan?',
+      opts: [['yes', 'Le interesa', 'Yes, tell me more', 10], ['maybe', 'Tal vez', 'Maybe', 5], ['no', 'Por ahora no', 'Not now', 0]] },
+  ];
+  const ORIGIN_PTS = { 'Referido': 10, 'Orgánico': 6, 'Google': 4, 'Thumbtack': 0 };
+  const URG_RANK = { alta: 3, media: 2, baja: 1 };
+
+  const isSpanish = (text) => /\b(hola|necesito|quiero|gracias|casa|por favor|buenas|cuánto)\b/i.test(text || '');
+  const qualOpt = (qid, key) => { const q = QUAL.find((x) => x.id === qid); return q && q.opts.find((o) => o[0] === key); };
+  const nextQuestion = (lead) => QUAL.find((q) => !((lead.qual && lead.qual.answers) || {})[q.id]);
+  const stamp = () => { const d = new Date(); return `${iso(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}`; }; // local time
+
+  function leadInsight(lead) {
+    const a = (lead.qual && lead.qual.answers) || {};
+    const answered = Object.keys(a).length;
+    let prob = 12 + (ORIGIN_PTS[lead.origin] ?? 3) + Object.entries(a).reduce((sum, [q, k]) => sum + ((qualOpt(q, k) || [])[3] || 0), 0);
+    if (lead.status === 'cotizado') prob += 5;
+    prob = Math.max(5, Math.min(95, prob));
+    if (lead.status === 'ganado') prob = 100;
+    if (lead.status === 'perdido') prob = 0;
+    let urgency = 'baja';
+    if (a.timing === 'week' || a.reason === 'hoa' || a.reason === 'sale') urgency = 'alta';
+    else if (a.timing === 'month' || a.reason === 'event' || !answered) urgency = 'media';
+    const signals = [];
+    if (a.reason === 'hoa') signals.push('Aviso de la HOA');
+    if (a.reason === 'sale') signals.push('Vende o renta');
+    if (a.decider === 'yes') signals.push('Decide él/ella');
+    if (a.decider === 'tenant') signals.push('Es inquilino');
+    if (a.compare === 'many') signals.push('Compara precios');
+    if (a.recurring === 'yes') signals.push('Quiere membresía');
+    const done = answered === QUAL.length;
+    const open = lead.status !== 'ganado' && lead.status !== 'perdido';
+    let task = null;
+    if (open) {
+      const first = lead.name.split(' ')[0];
+      const member = a.recurring === 'yes' ? ' y ofrecer membresía Gold' : '';
+      if (!done) task = { type: 'wait', auto: true, title: `El asistente espera la respuesta de ${first}`, why: `Pregunta ${answered + 1} de ${QUAL.length}: ${nextQuestion(lead).label.toLowerCase()}` };
+      else if (lead.status === 'cotizado') task = { type: 'follow', title: `Hacer seguimiento a la cotización de ${first}${member}`, why: prob >= 60 ? 'Alta probabilidad: falta el empujón final' : 'Recordarle la oferta y resolver dudas' };
+      else task = { type: 'quote', title: prob >= 60 ? `Llamar a ${first} y cerrar hoy${member}` : `Enviar cotización a ${first}${member}`, why: signals.slice(0, 3).join(' · ') || 'Calificación completa' };
+      const days = urgency === 'alta' ? 0 : urgency === 'media' ? 1 : 3;
+      task.due = addDays(today(), days);
+      task.key = lead.id + ':' + task.type;
+    }
+    return { prob, urgency, signals, answered, done, task };
+  }
+
+  // The assistant greets a new lead and asks the first question (runs inside DB.update).
+  function startAssistant(lead) {
+    lead.qual = lead.qual || { answers: {} };
+    const en = lead.lang !== 'es';
+    const first = lead.name.split(' ')[0];
+    lead.messages.push({ dir: 'bot', at: stamp(), text: en
+      ? `Hi ${first}! I'm the Near Me Best Work assistant. I'll get your quote ready for David with a few quick questions. ${QUAL[0].en}`
+      : `¡Hola ${first}! Soy el asistente de Near Me Best Work. Le preparo la cotización para David con unas preguntas rápidas. ${QUAL[0].es}` });
+  }
+  // Records the customer's answer and asks the next question, or wraps up.
+  function answerAssistant(lead, key) {
+    const q = nextQuestion(lead); if (!q) return;
+    const opt = qualOpt(q.id, key); const en = lead.lang !== 'es';
+    lead.qual.answers[q.id] = key;
+    lead.messages.push({ dir: 'in', at: stamp(), text: en ? opt[2] : opt[1].replace('Va a', 'Voy a').replace('Es inquilino', 'Soy inquilino').replace('Lo consulta', 'Lo consulto').replace('decide él/ella', 'yo decido').replace('Le interesa', 'Sí, cuénteme').replace('Solo está', 'Solo estoy').replace('quiere', 'quiero') });
+    const nq = nextQuestion(lead);
+    if (nq) { lead.messages.push({ dir: 'bot', at: stamp(), text: en ? nq.en : nq.es }); return; }
+    lead.qual.doneAt = new Date().toISOString();
+    if (lead.status === 'nuevo') lead.status = 'contactado';
+    lead.messages.push({ dir: 'bot', at: stamp(), text: en
+      ? `Thank you! David will send your quote shortly.${key === 'yes' ? ' You can also see our membership prices here: nearmebestwork.com/membership' : ''}`
+      : `¡Gracias! David le envía la cotización en breve.${key === 'yes' ? ' También puede ver los planes de membresía aquí: nearmebestwork.com/membership' : ''}` });
+  }
+
   // ---------- seed ----------
   function rng(seed) { return () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296); }
 
@@ -208,31 +291,38 @@
       fenceJob.memberId = plat.id; fenceJob.amount = 0;
     }
 
+    // [name, channel, origin, status, services, lang, first message, assistant answers]
     const leadSeed = [
-      ['Brenda Collins', 'WhatsApp', 'Orgánico', 'nuevo', ['roof'], 0, [['in', 'Hi! I saw your video on Instagram of the roof wash in Winter Park. How much for a 2-story house?'], ['in', 'Around 2,300 sq ft']]],
-      ['Óscar Villalobos', 'WhatsApp', 'Referido', 'nuevo', ['house', 'driveway'], 0, [['in', 'Hola, me dio su número mi vecino Jorge López. Necesito lavar la casa y el driveway.']]],
-      ['Megan Price', 'Web', 'Orgánico', 'nuevo', ['paver'], 0, [['in', 'Estimate request from website: paver sealing, approx. 600 sq ft patio.']]],
-      ['Frank DeLuca', 'Thumbtack', 'Thumbtack', 'contactado', ['driveway'], 0, [['in', 'Need driveway cleaned before Saturday'], ['out', 'Hi Frank, we can do Friday morning. Driveway + sidewalk is $99.']]],
-      ['Tasha Greene', 'Llamada', 'Google', 'contactado', ['house'], 0, []],
-      ['Rafael Ortiz', 'Walk-in', 'Orgánico', 'cotizado', ['roof', 'house'], 0, [['out', 'Rafael, como hablamos en la obra de su vecino: techo + casa por $640. ¿Le agendo?']]],
-      ['Heather Brooks', 'WhatsApp', 'Google', 'cotizado', ['screen'], 0, [['in', 'Can you clean a pool cage?'], ['out', 'Yes! Pool cage cleaning starts at $400. Can you send a photo?']]],
-      ['Greg Simmons', 'Thumbtack', 'Thumbtack', 'cotizado', ['house', 'driveway', 'pool'], 0, []],
-      ['Valeria Mejía', 'Web', 'Orgánico', 'ganado', ['house'], 0, []],
-      ['Doug Patterson', 'Thumbtack', 'Thumbtack', 'ganado', ['roof'], 0, []],
-      ['Cynthia Ward', 'Llamada', 'Referido', 'ganado', ['paver'], 0, []],
-      ['Alan Becker', 'Thumbtack', 'Thumbtack', 'perdido', ['driveway'], 0, []],
-      ['Monique Fields', 'WhatsApp', 'Orgánico', 'ganado', ['fence', 'driveway'], 0, []],
-      ['Pedro Salinas', 'Walk-in', 'Orgánico', 'contactado', ['house'], 0, []],
+      ['Brenda Collins', 'WhatsApp', 'Orgánico', 'nuevo', ['roof'], 'en', 'Hi! I saw your video on Instagram of the roof wash in Winter Park. How much for a 2-story house, around 2,300 sq ft?', { timing: 'week', reason: 'hoa', decider: 'yes', compare: 'few', recurring: 'yes' }],
+      ['Óscar Villalobos', 'WhatsApp', 'Referido', 'nuevo', ['house', 'driveway'], 'es', 'Hola, me dio su número mi vecino Jorge López. Necesito lavar la casa y el driveway.', { timing: 'month', reason: 'event', decider: 'yes' }],
+      ['Megan Price', 'Web', 'Orgánico', 'nuevo', ['paver'], 'en', 'Estimate request from website: paver sealing, approx. 600 sq ft patio.', {}],
+      ['Frank DeLuca', 'Thumbtack', 'Thumbtack', 'contactado', ['driveway'], 'en', 'Need driveway cleaned before Saturday', { timing: 'week', reason: 'none', decider: 'yes', compare: 'many', recurring: 'no' }],
+      ['Tasha Greene', 'Llamada', 'Google', 'contactado', ['house'], 'en', 'Called asking for a house wash before listing the home.', { timing: 'month', reason: 'sale', decider: 'shared', compare: 'few', recurring: 'maybe' }],
+      ['Rafael Ortiz', 'Walk-in', 'Orgánico', 'cotizado', ['roof', 'house'], 'es', 'Me pidió precio en la obra de su vecino: techo y casa.', { timing: 'week', reason: 'none', decider: 'yes', compare: 'no', recurring: 'yes' }],
+      ['Heather Brooks', 'WhatsApp', 'Google', 'cotizado', ['screen'], 'en', 'Can you clean a pool cage?', { timing: 'later', reason: 'none', decider: 'yes', compare: 'many', recurring: 'maybe' }],
+      ['Greg Simmons', 'Thumbtack', 'Thumbtack', 'cotizado', ['house', 'driveway', 'pool'], 'en', 'Looking for house, driveway and pool deck cleaning.', { timing: 'month', reason: 'event', decider: 'tenant', compare: 'many', recurring: 'no' }],
+      ['Valeria Mejía', 'Web', 'Orgánico', 'ganado', ['house'], 'es', 'Hola, quiero lavar la casa.', { timing: 'week', reason: 'none', decider: 'yes', compare: 'no', recurring: 'yes' }],
+      ['Doug Patterson', 'Thumbtack', 'Thumbtack', 'ganado', ['roof'], 'en', 'Roof is getting black streaks.', { timing: 'month', reason: 'hoa', decider: 'yes', compare: 'few', recurring: 'no' }],
+      ['Cynthia Ward', 'Llamada', 'Referido', 'ganado', ['paver'], 'en', 'Referred by a neighbor for paver sealing.', { timing: 'week', reason: 'event', decider: 'yes', compare: 'no', recurring: 'maybe' }],
+      ['Alan Becker', 'Thumbtack', 'Thumbtack', 'perdido', ['driveway'], 'en', 'Price for driveway?', { timing: 'later', reason: 'none', decider: 'tenant', compare: 'many', recurring: 'no' }],
+      ['Monique Fields', 'WhatsApp', 'Orgánico', 'ganado', ['fence', 'driveway'], 'en', 'Need fence and driveway cleaned.', { timing: 'week', reason: 'sale', decider: 'yes', compare: 'few', recurring: 'yes' }],
+      ['Pedro Salinas', 'Walk-in', 'Orgánico', 'contactado', ['house'], 'es', 'Preguntó en la calle mientras lavábamos la casa de al lado.', { timing: 'later', reason: 'none', decider: 'shared', compare: 'few', recurring: 'maybe' }],
     ];
-    const leads = leadSeed.map(([name, channel, origin, status, services, , msgs], i) => ({
-      id: 'l' + (i + 1), name, channel, origin, status, services,
-      phone: `(407) ${300 + i * 17}-${2000 + i * 131}`,
-      value: services.reduce((s, id) => s + svc(id).price, 0),
-      createdAt: addDays(T, -Math.floor(i / 2)), messages: msgs.map(([dir, text], k) => ({ dir, text, at: addDays(T, -Math.floor(i / 2)) + `T${pad(9 + k)}:1${k}` })),
-    }));
+    const leads = leadSeed.map(([name, channel, origin, status, services, lang, firstMsg, answers], i) => {
+      const day = addDays(T, -Math.floor(i / 2));
+      const lead = { id: 'l' + (i + 1), name, channel, origin, status, services, lang, phone: `(407) ${300 + i * 17}-${2000 + i * 131}`,
+        value: services.reduce((sum, id) => sum + svc(id).price, 0), createdAt: day, messages: [{ dir: 'in', text: firstMsg, at: day + 'T09:02' }] };
+      const keepStatus = status;
+      startAssistant(lead);
+      Object.values(answers).forEach((k) => answerAssistant(lead, k));
+      lead.status = keepStatus;
+      lead.messages.forEach((m, k) => (m.at = day + `T${pad(9 + Math.floor(k / 4))}:${pad(2 + (k % 4) * 12)}`));
+      return lead;
+    });
+    const taskDone = {};
 
     const pins = Object.fromEntries(TECHS.map((t) => [t.id, { pin: t.pin, changedAt: null }]));
-    return { version: 2, seededAt: T, clients, jobs, payments, expenses, members, leads, pins, reportsSent: {}, events: [] };
+    return { version: VERSION, seededAt: T, clients, jobs, payments, expenses, members, leads, pins, taskDone, reportsSent: {}, events: [] };
   }
 
   // ---------- persistence ----------
@@ -255,7 +345,7 @@
     if (cache) return cache;
     let local = null;
     try { local = JSON.parse(localStorage.getItem(KEY)); } catch (e) { local = null; }
-    if (local && local.state && local.state.version === 2) { cache = local.state; rev = local.rev || 0; }
+    if (local && local.state && local.state.version === VERSION) { cache = local.state; rev = local.rev || 0; }
     else { cache = seed(); rev = 0; }
     return cache;
   }
@@ -346,7 +436,8 @@
         const row = await fetchRow();
         if (row) setCache(row.data, row.rev);
         else { setCache(seed(), 0); pending.push(() => {}); await flush(); }
-        if (cache.seededAt !== today()) update(rollDates);
+        if (cache.version !== VERSION) reset();
+        else if (cache.seededAt !== today()) update(rollDates);
         sb.channel('demo_state')
           .on('postgres_changes', { event: '*', schema: 'public', table: 'demo_state' }, (p) => {
             if (!(p.new && p.new.rev <= rev)) refresh().catch(() => {});
@@ -397,6 +488,6 @@
   window.DB = {
     SERVICES, PLANS, BANDS, TECHS, USERS, PAY_METHODS,
     load, ready, update, reset, onChange, uploadPhoto, online: () => !!sb,
-    helpers: { iso, today, addDays, uid, usd, svc, tech, bandFor, priceFor, lookupAddress, photoSrc, fmtDate, esc, compressImage, techPin, pinChangedAt },
+    helpers: { iso, today, addDays, uid, usd, svc, tech, bandFor, priceFor, lookupAddress, photoSrc, fmtDate, esc, compressImage, techPin, pinChangedAt, isSpanish, stamp, startAssistant, answerAssistant, leadInsight, nextQuestion, QUAL, URG_RANK },
   };
 })();

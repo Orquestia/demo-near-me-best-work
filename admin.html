@@ -117,18 +117,18 @@
   .cal-head.today .dn { background: var(--gold); color: var(--navy); border-radius: 999px; padding: 1px 8px; }
   .cal-hours div { font-size: 11px; color: var(--muted); text-align: right; padding: 0 8px; transform: translateY(-7px); }
   .cal-hours div:first-child { transform: none; }
-  .cal-col { position: relative; border-left: 1px solid var(--line); }
+  .cal-col { position: relative; border-left: 1px solid var(--line); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 32px, #f6f8fb 32px, #f6f8fb 33px, transparent 33px, transparent 66px); }
   .slot { position: absolute; left: 0; right: 0; border-top: 1px solid #f1f5f9; cursor: copy; }
   .slot:hover { background: #f8fafc; }
   .now-line { position: absolute; left: 0; right: 0; height: 2px; background: var(--red); z-index: 2; pointer-events: none; }
   .now-line::before { content: ''; position: absolute; left: -4px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
-  .ev { position: absolute; z-index: 1; border-left: 3px solid; border-radius: 8px; padding: 4px 7px; font-size: 12px; line-height: 1.3; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; gap: 1px; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+  .ev { position: absolute; z-index: 1; border-left: 3px solid; border-radius: 9px; padding: 5px 8px; font-size: 12.5px; line-height: 1.3; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; gap: 1px; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.05); }
   .ev:hover { box-shadow: var(--shadow); z-index: 4; }
   .ev.done { opacity: .62; }
   .ev b { font-size: 11.5px; color: var(--navy); }
   .ev-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ev-sub { color: var(--muted); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .month { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .month { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .mh { padding: 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--line); text-align: center; }
   .mc { min-height: 104px; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; padding: 6px; cursor: pointer; display: grid; gap: 3px; align-content: start; }
   .mc:hover { background: #f8fafc; }
@@ -219,6 +219,64 @@
     .side-foot { grid-template-columns: 1fr 1fr; padding-top: 10px; }
     .g4 { grid-template-columns: minmax(0, 1fr); }
   }
+
+  /* ---- CRM, assistant and modern touches ---- */
+  body { background: radial-gradient(1100px 520px at 105% -8%, #e3ebf7 0%, transparent 60%), var(--bg); }
+  .card { border-radius: 16px; border-color: #e6ebf2; box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.04); }
+  .kpi.hl { background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%); }
+  .kpi .v { font-size: 28px; }
+  .nav a { position: relative; }
+  .nav a.on::before { content: ''; position: absolute; left: -10px; top: 9px; bottom: 9px; width: 3px; border-radius: 3px; background: var(--gold); }
+  .topbar { background: rgba(244,246,249,.78); }
+  .live { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: #15803d; background: #ecfdf5; border: 1px solid #bbf7d0; border-radius: 999px; padding: 6px 12px; }
+  .pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.55); animation: pulse 1.8s infinite; flex: none; }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+  .bot-kpi { background: linear-gradient(135deg, #ecfdf5 0%, #fff 70%); }
+  .bot-kpi small { display: flex; align-items: center; gap: 8px; }
+  .crm-layout { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; align-items: start; }
+  @media (max-width: 1280px) { .crm-layout { grid-template-columns: minmax(0, 1fr); } .tasks { position: static !important; max-height: none !important; } }
+  .crm-board { min-width: 0; }
+  .pipeline { grid-template-columns: repeat(5, minmax(236px, 1fr)); }
+  .col { background: linear-gradient(180deg, #edf1f6, #f3f5f9); }
+  .col h4 span:last-child { font-weight: 600; color: var(--navy); text-transform: none; letter-spacing: 0; }
+  .lead { border-radius: 13px; }
+  .tasks { position: sticky; top: 92px; max-height: calc(100vh - 112px); overflow-y: auto; }
+  .task-list { display: grid; gap: 8px; }
+  .task { display: flex; gap: 12px; align-items: center; padding: 12px; border: 1px solid var(--line); border-left: 4px solid #cbd5e1; border-radius: 12px; background: #fff; cursor: pointer; transition: box-shadow .15s, transform .15s; }
+  .task:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+  .task.u-alta { border-left-color: #e05252; } .task.u-media { border-left-color: var(--gold); } .task.u-baja { border-left-color: #cbd5e1; }
+  .task.auto { background: #f8fafc; border-left-color: var(--sky); border-style: dashed; border-left-style: solid; }
+  .tbody { flex: 1; min-width: 0; display: grid; gap: 4px; }
+  .tbody b { font-size: 13.5px; color: var(--navy); line-height: 1.35; }
+  .tbody .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .tcheck { width: 22px; height: 22px; border-radius: 7px; border: 2px solid #cbd5e1; background: #fff; cursor: pointer; flex: none; }
+  .tcheck:hover { border-color: var(--green); background: #E3F5DE; }
+  .ring { position: relative; display: inline-grid; place-items: center; flex: none; }
+  .ring svg { position: absolute; inset: 0; }
+  .ring b { position: relative; color: var(--navy); font-family: var(--display); }
+  .chip.urg-alta { background: #FDE2E2; color: #a11c1c; } .chip.urg-media { background: var(--gold-soft); color: #7a5a06; } .chip.urg-baja { background: #EEF0F3; color: #475569; }
+  .chip[class*="urg-"] i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .bot-line { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+  .drawer { width: min(600px, 100vw); }
+  .qual { border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 14px; background: linear-gradient(180deg, #f8fafc, #fff); }
+  .qual-top { display: flex; gap: 16px; align-items: center; }
+  .qual-top .chip[class*="urg-"] { justify-self: start; }
+  .qual-top .row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .qual-steps { display: grid; gap: 6px; }
+  .qs { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; padding: 8px 11px; border-radius: 9px; background: #fff; border: 1px solid var(--line); }
+  .qs span { color: var(--muted); } .qs.ok b { color: #2f7a1f; } .qs.now { border-color: var(--gold); background: #fffbeb; } .qs.now b { color: #7a5a06; }
+  .next-task { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: linear-gradient(135deg, var(--navy), var(--blue)); color: #fff; border-radius: 12px; padding: 12px 14px; }
+  .next-task b { display: block; color: #fff; font-size: 14px; margin-top: 2px; }
+  .next-task .sec-t { color: #94a3b8; }
+  .next-task .btn { background: var(--gold); color: var(--navy); }
+  .sim { display: grid; gap: 8px; border-top: 1px dashed var(--line); padding-top: 12px; }
+  .wa .bot { background: #e8f1ff; justify-self: start; border-top-left-radius: 2px; }
+  .wa .who { display: block; font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+  .autos { display: grid; gap: 8px; }
+  .auto { display: flex; gap: 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+  .auto > div { flex: 1; display: grid; gap: 2px; }
+  .auto b { font-size: 13.5px; color: var(--navy); }
+  .aic { width: 34px; height: 34px; border-radius: 10px; background: var(--bg); display: grid; place-items: center; font-size: 15px; flex: none; color: var(--navy); font-weight: 800; }
 </style>
 </head>
 <body>
@@ -234,6 +292,7 @@
 <main>
   <div class="topbar">
     <div><h1 id="title">Panel</h1><div class="date" id="today"></div></div>
+    <div class="live"><span class="pulse"></span>Sincronizado en vivo</div>
   </div>
   <div class="content" id="content"></div>
 </main>
@@ -246,7 +305,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="assets/config.js?v=3"></script>
-<script src="assets/store.js?v=5"></script>
+<script src="assets/store.js?v=7"></script>
 <script>
 const { PLANS, SERVICES, TECHS, USERS, PAY_METHODS, helpers: H } = DB;
 const { usd, esc, svc, tech, fmtDate } = H;
@@ -275,7 +334,6 @@ const VIEWS = [
   { id: 'config', label: 'Configuración', group: 'Ajustes' },
 ];
 const LOCKED = [
-  { id: 'm5', label: 'Agente de ventas IA', mod: 'M5', desc: 'El método de venta de David por escrito y un agente que responde y califica leads con ese método, conectado a este CRM.' },
   { id: 'm7', label: 'Contabilidad completa', mod: 'M7', desc: 'Ingresos, gastos y reportes para la contadora dentro de la plataforma, para reemplazar QuickBooks.' },
   { id: 'm8', label: 'Inventario', mod: 'M8', desc: 'Químicos, materiales y consumo por trabajo.' },
   { id: 'm9', label: 'Tienda en línea', mod: 'M9', desc: 'Venta de productos de mantenimiento, cuando David defina sus proveedores.' },
@@ -400,6 +458,22 @@ function vPanel() {
   </div>
   <div class="grid g32">
     <div class="card">
+      <div class="card-head"><h3>Tareas prioritarias de ventas</h3><a class="btn btn-ghost btn-sm" data-go="crm">Ir al CRM</a></div>
+      <div class="task-list">${crmTasks().filter((x) => !x.t.auto && !x.done).slice(0, 4).map(({ l, i, t }) => `<div class="task u-${i.urgency}" data-lead="${l.id}"><div class="tbody"><b>${esc(t.title)}</b><div class="row">${urgChip(i.urgency)}<span class="sm muted">${esc(t.why)}</span></div></div>${probRing(i.prob, 42)}</div>`).join('') || '<div class="muted sm">Sin tareas pendientes.</div>'}</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h3>Automatizaciones activas</h3><span class="chip green"><span class="pulse"></span>5 activas</span></div>
+      <div class="autos">${[
+        ['🤖', 'Asistente de WhatsApp', `Califica cada lead nuevo · ${crmTasks().filter((x) => x.t.auto).length} conversaciones en curso`],
+        ['★', 'Membresías desde la web', 'Alta en el CRM y visitas del año programadas'],
+        ['📷', 'Reportes de la app de campo', 'Fotos, cobros y trabajos llegan solos al panel'],
+        ['$', 'Resumen para la contadora', 'Listo cada día a las 6:00 p. m.'],
+        ['🔔', 'Recordatorios de visitas', 'Avisa las visitas de membresía por agendar'],
+      ].map(([ic, t, d]) => `<div class="auto"><span class="aic">${ic}</span><div><b>${t}</b><span class="sm muted">${d}</span></div><span class="pulse"></span></div>`).join('')}</div>
+    </div>
+  </div>
+  <div class="grid g32">
+    <div class="card">
       <div class="card-head"><h3>Ingresos de los últimos 30 días</h3><div class="legend"><span><span class="dot" style="background:var(--blue)"></span>Trabajos</span><span><span class="dot" style="background:var(--gold)"></span>Membresías</span></div></div>
       <div class="bars">${byDay.map((x) => `<div class="b" title="${fmtDate(x.d)} · ${usd(x.job + x.mem)}" style="height:${((x.job + x.mem) / maxDay) * 100}%"><span style="height:${x.job + x.mem ? (x.job / (x.job + x.mem)) * 100 : 0}%; background:var(--blue)"></span><span style="flex:1; background:var(--gold)"></span></div>`).join('')}</div>
       <div class="axis"><span>${fmtDate(days[0])}</span><span>${fmtDate(days[15])}</span><span>Hoy</span></div>
@@ -417,31 +491,80 @@ function evHtml(e) {
   return `<div class="ev"><div class="ic" style="background:${bg}">${i}</div><div>${esc(e.text)}<time>${timeAgo(e.at)}</time></div></div>`;
 }
 
+// ---------- CRM ----------
+const probColor = (p) => (p >= 70 ? 'var(--green)' : p >= 40 ? 'var(--gold)' : '#e05252');
+function probRing(p, size = 38) {
+  const r = size / 2 - 4, c = 2 * Math.PI * r;
+  return `<span class="ring" style="width:${size}px; height:${size}px" title="Probabilidad de cierre ${p}%"><svg viewBox="0 0 ${size} ${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" stroke="#e8edf3" stroke-width="4" fill="none"/><circle cx="${size / 2}" cy="${size / 2}" r="${r}" stroke="${probColor(p)}" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="${(p / 100) * c} ${c}" transform="rotate(-90 ${size / 2} ${size / 2})"/></svg><b style="font-size:${size > 50 ? 17 : 10.5}px">${p}%</b></span>`;
+}
+const urgChip = (u) => `<span class="chip urg-${u}"><i></i>${u === 'alta' ? 'Urgencia alta' : u === 'media' ? 'Urgencia media' : 'Urgencia baja'}</span>`;
+const dueLabel = (d) => { const t = H.today(); return d < t ? 'Vencida' : d === t ? 'Hoy' : d === H.addDays(t, 1) ? 'Mañana' : fmtDate(d, { weekday: 'short', day: 'numeric' }); };
+const answerText = (qid, key) => { const q = H.QUAL.find((x) => x.id === qid); const o = q && q.opts.find((x) => x[0] === key); return o ? o[1] : key; };
+
+function crmTasks() {
+  return S.leads.map((l) => ({ l, i: H.leadInsight(l) })).filter(({ i }) => i.task)
+    .map(({ l, i }) => ({ l, i, t: i.task, done: (S.taskDone || {})[i.task.key] }))
+    .sort((a, b) => H.URG_RANK[b.i.urgency] - H.URG_RANK[a.i.urgency] || b.i.prob - a.i.prob);
+}
+
 function vCrm() {
   const F = ['Todos', 'Orgánico', 'Thumbtack', 'Google', 'Referido'];
   const leads = S.leads.filter((l) => ui.leadFilter === 'Todos' || l.origin === ui.leadFilter);
   const cols = [['nuevo', 'Nuevos'], ['contactado', 'Contactados'], ['cotizado', 'Cotizados'], ['ganado', 'Ganados'], ['perdido', 'Perdidos']];
   const chIcon = { WhatsApp: '🟢', Web: '🌐', Llamada: '📞', 'Walk-in': '🚶', Thumbtack: '📌' };
+  const open = S.leads.filter((l) => l.status !== 'ganado' && l.status !== 'perdido').map((l) => ({ l, i: H.leadInsight(l) }));
+  const weighted = open.reduce((sum, { l, i }) => sum + (l.value * i.prob) / 100, 0);
+  const hot = open.filter(({ i }) => i.prob >= 70);
+  const tasks = crmTasks();
+  const mine = tasks.filter((x) => !x.t.auto && !x.done);
+  const auto = tasks.filter((x) => x.t.auto);
+  const doneCount = tasks.filter((x) => x.done).length;
+  const T = H.today();
   return `
+  <div class="grid g4">
+    <div class="card kpi hl"><small>Pipeline ponderado</small><div class="v">${usd(weighted)}</div><div class="s">valor × probabilidad de cierre</div></div>
+    <div class="card kpi"><small>Leads calientes</small><div class="v">${hot.length}</div><div class="s">con 70% o más de probabilidad</div></div>
+    <div class="card kpi"><small>Tareas para hoy</small><div class="v">${mine.filter((x) => x.t.due <= T).length}</div><div class="s">${doneCount} completadas</div></div>
+    <div class="card kpi bot-kpi"><small><span class="pulse"></span>Asistente de WhatsApp</small><div class="v">${auto.length}</div><div class="s">conversaciones calificando ahora · responde en segundos</div></div>
+  </div>
   <div class="card-head" style="margin:0">
     <div class="filters">${F.map((f) => `<button data-lf="${f}" class="${ui.leadFilter === f ? 'on' : ''}">${f}</button>`).join('')}</div>
-    <div style="display:flex; gap:8px; flex-wrap:wrap"><span class="chip green" style="padding:7px 12px; white-space:normal">● WhatsApp conectado · (407) 800-5400</span><button class="btn btn-navy btn-sm" data-act="newLead">+ Lead de llamada o walk-in</button></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center"><span class="chip green" style="padding:7px 12px; white-space:normal">● WhatsApp conectado · (407) 800-5400</span><button class="btn btn-navy btn-sm" data-act="newLead">+ Lead de llamada o walk-in</button></div>
   </div>
-  <p class="muted sm" style="margin:0">Arrastra las tarjetas con el mouse para cambiarlas de etapa. Haz clic en una para ver la conversación.</p>
-  <div class="pipeline">${cols.map(([k, label]) => {
-    const ls = leads.filter((l) => l.status === k);
-    return `<div class="col" data-status="${k}"><h4>${label}<span>${ls.length}</span></h4>${ls.map((l) => `
-      <div class="lead ${l.isNew ? 'new' : ''}" data-lead="${l.id}" draggable="true">
-        <div class="row" style="justify-content:space-between"><b>${esc(l.name)}</b><span class="sm muted">${fmtDate(l.createdAt)}</span></div>
-        <div class="sm muted">${svcList(l.services)}</div>
-        <div class="row">${originChip(l.origin)}<span class="chip gray">${chIcon[l.channel] || ''} ${l.channel}</span>${l.value ? `<span class="sm" style="margin-left:auto; font-weight:600">${usd(l.value)}</span>` : ''}</div>
-        ${l.messages.length ? `<div class="sm muted" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis">“${esc(l.messages[l.messages.length - 1].text)}”</div>` : ''}
-      </div>`).join('')}</div>`;
-  }).join('')}</div>`;
+  <div class="crm-layout">
+    <div class="crm-board">
+      <p class="muted sm" style="margin:0 0 10px">Arrastra las tarjetas para cambiar de etapa. Cada lead muestra la probabilidad de cierre que calcula el asistente.</p>
+      <div class="pipeline">${cols.map(([k, label]) => {
+        const ls = leads.filter((l) => l.status === k).map((l) => ({ l, i: H.leadInsight(l) })).sort((a, b) => b.i.prob - a.i.prob);
+        const colVal = ls.reduce((sum, { l }) => sum + l.value, 0);
+        return `<div class="col" data-status="${k}"><h4><span>${label} · ${ls.length}</span><span>${usd(colVal)}</span></h4>${ls.map(({ l, i }) => `
+          <div class="lead ${l.isNew ? 'new' : ''}" data-lead="${l.id}" draggable="true">
+            <div class="row" style="justify-content:space-between; flex-wrap:nowrap; gap:8px"><div style="min-width:0"><b>${esc(l.name)}</b><div class="sm muted">${svcList(l.services)}</div></div>${k === 'ganado' || k === 'perdido' ? '' : probRing(i.prob)}</div>
+            <div class="row">${originChip(l.origin)}<span class="chip gray">${chIcon[l.channel] || ''} ${l.channel}</span>${l.value ? `<span class="sm" style="margin-left:auto; font-weight:600">${usd(l.value)}</span>` : ''}</div>
+            ${k === 'ganado' || k === 'perdido' ? '' : `<div class="row" style="justify-content:space-between">${urgChip(i.urgency)}<span class="bot-line">🤖 ${i.done ? 'Calificado' : `Preguntando ${i.answered + 1}/${H.QUAL.length}`}</span></div>`}
+          </div>`).join('')}</div>`;
+      }).join('')}</div>
+    </div>
+    <aside class="card tasks">
+      <div class="card-head" style="margin-bottom:6px"><h3>Tareas priorizadas</h3><span class="chip gold">Por urgencia y cierre</span></div>
+      <p class="muted sm" style="margin:0 0 12px">El asistente las crea y las ordena solo, según lo que respondió cada cliente.</p>
+      <div class="task-list">${mine.map(({ l, i, t }) => `
+        <div class="task u-${i.urgency}" data-lead="${l.id}">
+          <button class="tcheck" data-taskdone="${t.key}" title="Marcar como hecha"></button>
+          <div class="tbody"><b>${esc(t.title)}</b><span class="sm muted">${esc(t.why)}</span>
+            <div class="row">${urgChip(i.urgency)}<span class="chip ${t.due < T ? 'red' : t.due === T ? 'gold' : 'gray'}">${dueLabel(t.due)}</span>${l.value ? `<span class="sm muted">${usd(l.value)}</span>` : ''}</div></div>
+          ${probRing(i.prob, 44)}
+        </div>`).join('') || '<div class="muted sm" style="padding:12px 0">Sin tareas pendientes. 🎉</div>'}</div>
+      ${auto.length ? `<div class="sec-t" style="margin-top:16px">🤖 El asistente está trabajando</div>
+      <div class="task-list">${auto.map(({ l, i, t }) => `<div class="task auto" data-lead="${l.id}"><div class="tbody"><b>${esc(t.title)}</b><span class="sm muted">${esc(t.why)}</span></div>${probRing(i.prob, 36)}</div>`).join('')}</div>` : ''}
+    </aside>
+  </div>`;
 }
 
 // ---------- agenda calendar ----------
-const DAY_START = 7, DAY_END = 19, HOUR_PX = 56;
+const DAY_START = 7, DAY_END = 19, HOUR_PX = 66;
+const WORK_DAYS = [0, 1, 2, 3, 4, 5]; // Monday to Saturday; Near Me Best Work doesn't work Sundays
+const isSunday = (d) => new Date(d + 'T12:00:00').getDay() === 0;
 const SVC_HOURS = { house: 2, driveway: 1, roof: 3, pool: 1.5, paver: 3, fence: 1.5, screen: 2 };
 const jobHours = (j) => Math.min(6, Math.max(1, j.services.reduce((h, id) => h + (SVC_HOURS[id] || 1), 0)));
 const toHours = (t) => { const [h, m] = t.split(':').map(Number); return h + m / 60; };
@@ -472,13 +595,16 @@ function calEvent(it, showTech) {
 function timeGrid(columns, minCol = 150) {
   const hours = []; for (let h = DAY_START; h < DAY_END; h++) hours.push(h);
   const T = H.today(), nowH = new Date().getHours() + new Date().getMinutes() / 60;
-  return `<div class="cal" style="grid-template-columns:58px repeat(${columns.length}, minmax(${minCol}px, 1fr))">
+  // A day with overlapping jobs gets proportionally wider so blocks don't get squeezed.
+  columns.forEach((c) => { c.laid = layoutLanes(c.jobs); c.lanes = Math.max(1, ...c.laid.map((it) => it.lanes)); });
+  const tpl = columns.map((c) => `minmax(${Math.max(minCol, c.lanes * 100)}px, ${c.lanes}fr)`).join(' ');
+  return `<div class="cal" style="grid-template-columns:58px ${tpl}">
     <div class="cal-corner"></div>${columns.map((c) => `<div class="cal-head ${c.today ? 'today' : ''}" ${c.go ? `data-calgo="${c.go}"` : ''}>${c.head}</div>`).join('')}
     <div class="cal-hours">${hours.map((h) => `<div style="height:${HOUR_PX}px">${String(h).padStart(2, '0')}:00</div>`).join('')}</div>
     ${columns.map((c) => `<div class="cal-col" style="height:${(DAY_END - DAY_START) * HOUR_PX}px">
       ${hours.map((h) => `<div class="slot" style="top:${(h - DAY_START) * HOUR_PX}px; height:${HOUR_PX}px" data-slot="${c.date}|${String(h).padStart(2, '0')}:00|${c.techId || ''}"></div>`).join('')}
       ${c.date === T && nowH > DAY_START && nowH < DAY_END ? `<div class="now-line" style="top:${(nowH - DAY_START) * HOUR_PX}px"></div>` : ''}
-      ${layoutLanes(c.jobs).map((it) => calEvent(it, c.showTech)).join('')}
+      ${c.laid.map((it) => calEvent(it, c.showTech)).join('')}
     </div>`).join('')}
   </div>`;
 }
@@ -491,18 +617,18 @@ function vTrabajos() {
     const dayJobs = calJobs().filter((j) => j.date === d);
     inRange = dayJobs;
     title = fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    body = timeGrid(techs.map((t) => ({ date: d, techId: t.id, today: d === T, head: `<span class="dot" style="background:${t.color}"></span>${t.name} <span class="muted">${dayJobs.filter((j) => j.techId === t.id).length}</span>`, jobs: dayJobs.filter((j) => j.techId === t.id) })));
+    body = isSunday(d) ? '<div class="card locked-view"><h3 style="color:var(--navy)">Domingo · no se trabaja</h3><p class="muted" style="margin:0">La agenda va de lunes a sábado.</p></div>' : timeGrid(techs.map((t) => ({ date: d, techId: t.id, today: d === T, head: `<span class="dot" style="background:${t.color}"></span>${t.name} <span class="muted">${dayJobs.filter((j) => j.techId === t.id).length}</span>`, jobs: dayJobs.filter((j) => j.techId === t.id) })));
   } else if (mode === 'semana') {
-    const ws = weekStart(d), days = [0, 1, 2, 3, 4, 5, 6].map((i) => H.addDays(ws, i));
-    inRange = calJobs().filter((j) => j.date >= days[0] && j.date <= days[6]);
-    title = `${fmtDate(days[0], { day: 'numeric', month: 'short' })} – ${fmtDate(days[6], { day: 'numeric', month: 'short', year: 'numeric' })}`;
-    body = timeGrid(days.map((day) => ({ date: day, today: day === T, go: day, showTech: true, head: `<span class="wd">${fmtDate(day, { weekday: 'short' })}</span> <span class="dn">${Number(day.slice(8))}</span>`, jobs: inRange.filter((j) => j.date === day) })), 112);
+    const ws = weekStart(d), days = WORK_DAYS.map((i) => H.addDays(ws, i));
+    inRange = calJobs().filter((j) => j.date >= days[0] && j.date <= days[5]);
+    title = `${fmtDate(days[0], { day: 'numeric', month: 'short' })} – ${fmtDate(days[5], { day: 'numeric', month: 'short', year: 'numeric' })} · lunes a sábado`;
+    body = timeGrid(days.map((day) => ({ date: day, today: day === T, go: day, showTech: true, head: `<span class="wd">${fmtDate(day, { weekday: 'short' })}</span> <span class="dn">${Number(day.slice(8))}</span>`, jobs: inRange.filter((j) => j.date === day) })), 130);
   } else {
     const first = d.slice(0, 8) + '01', gs = weekStart(first);
-    const cells = Array.from({ length: 42 }, (_, i) => H.addDays(gs, i));
+    const cells = Array.from({ length: 6 }, (_, w) => WORK_DAYS.map((i) => H.addDays(gs, w * 7 + i))).flat();
     inRange = calJobs().filter((j) => j.date.slice(0, 7) === d.slice(0, 7));
     title = fmtDate(first, { month: 'long', year: 'numeric' });
-    body = `<div class="month">${['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'].map((w) => `<div class="mh">${w}</div>`).join('')}
+    body = `<div class="month">${['lun', 'mar', 'mié', 'jue', 'vie', 'sáb'].map((w) => `<div class="mh">${w}</div>`).join('')}
       ${cells.map((day) => { const js = calJobs().filter((j) => j.date === day).sort((a, b) => a.time.localeCompare(b.time)); return `<div class="mc ${day.slice(0, 7) !== d.slice(0, 7) ? 'out' : ''} ${day === T ? 'today' : ''}" data-calgo="${day}"><div class="mn">${Number(day.slice(8))}</div>
         ${js.slice(0, 3).map((j) => `<div class="mchip" data-job="${j.id}" style="border-left-color:${tech(j.techId).color}">${j.time} ${esc(client(j.clientId).name.split(' ')[0])}</div>`).join('')}${js.length > 3 ? `<div class="more">+${js.length - 3} más</div>` : ''}</div>`; }).join('')}</div>`;
   }
@@ -690,24 +816,44 @@ function leadDrawer(id) {
   const l = S.leads.find((x) => x.id === id); if (!l) return;
   ui.drawer = ['lead', id];
   if (l.isNew) { DB.update((s) => { const x = s.leads.find((y) => y.id === id); delete x.isNew; }); S = DB.load(); }
+  const i = H.leadInsight(l);
+  const a = (l.qual && l.qual.answers) || {};
+  const nq = H.nextQuestion(l);
+  const closed = l.status === 'ganado' || l.status === 'perdido';
   openDrawer(`
     <div class="dh"><div><h2>${esc(l.name)}</h2><div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap">${originChip(l.origin)}<span class="chip gray">${l.channel}</span><span class="chip gray">${esc(l.phone)}</span></div></div><button class="x" data-act="close">×</button></div>
     <div class="db">
+      <div class="qual">
+        <div class="qual-top">${probRing(i.prob, 72)}<div style="display:grid; gap:6px"><div class="sec-t" style="margin:0">Calificación del asistente</div>${closed ? `<span class="chip ${l.status === 'ganado' ? 'green' : 'red'}">${l.status === 'ganado' ? 'Ganado' : 'Perdido'}</span>` : urgChip(i.urgency)}<div class="row">${i.signals.map((x) => `<span class="chip sky">${x}</span>`).join('')}</div></div></div>
+        <div class="qual-steps">${H.QUAL.map((q) => `<div class="qs ${a[q.id] ? 'ok' : nq && nq.id === q.id ? 'now' : ''}"><span>${q.label}</span><b>${a[q.id] ? answerText(q.id, a[q.id]) : nq && nq.id === q.id ? 'Esperando respuesta…' : '—'}</b></div>`).join('')}</div>
+        ${i.task && !i.task.auto ? `<div class="next-task"><div><span class="sec-t" style="margin:0">Siguiente paso</span><b>${esc(i.task.title)}</b></div><button class="btn btn-navy btn-sm" data-taskdone="${i.task.key}">${(S.taskDone || {})[i.task.key] ? 'Hecha ✓' : 'Marcar hecha'}</button></div>` : ''}
+        ${nq && !closed ? `<div class="sim"><span class="sm muted">Demo · simula lo que responde el cliente:</span><div class="quick">${nq.opts.map((o) => `<button class="btn btn-ghost btn-sm" data-ans="${o[0]}">${o[1]}</button>`).join('')}<button class="btn btn-gold btn-sm" data-act="autoqual">▶ Completar conversación</button></div></div>` : ''}
+      </div>
       <dl class="kv"><dt>Interés</dt><dd>${svcList(l.services)}</dd><dt>Valor estimado</dt><dd>${l.value ? usd(l.value) : '—'}</dd><dt>Entró</dt><dd>${fmtDate(l.createdAt, { day: 'numeric', month: 'long' })}</dd>
-      <dt>Estado</dt><dd><select class="input" style="padding:6px 8px" id="leadStatus">${['nuevo', 'contactado', 'cotizado', 'ganado', 'perdido'].map((s) => `<option ${s === l.status ? 'selected' : ''}>${s}</option>`).join('')}</select></dd></dl>
+      <dt>Etapa</dt><dd><select class="input" style="padding:6px 8px" id="leadStatus">${['nuevo', 'contactado', 'cotizado', 'ganado', 'perdido'].map((st) => `<option ${st === l.status ? 'selected' : ''}>${st}</option>`).join('')}</select></dd></dl>
       <div>
-        <div class="wa-head"><span class="g"></span>Conversación de WhatsApp · todo queda en el historial del cliente</div>
-        <div class="wa" id="wa">${l.messages.map((m) => `<div class="m ${m.dir}">${esc(m.text)}<time>${m.at.slice(11, 16) || ''}</time></div>`).join('') || '<div class="empty">Sin mensajes aún. Escribe el primero.</div>'}</div>
+        <div class="wa-head"><span class="g"></span>WhatsApp · el asistente responde y David puede intervenir cuando quiera</div>
+        <div class="wa" id="wa">${l.messages.map((m) => `<div class="m ${m.dir}">${m.dir === 'bot' ? '<span class="who">🤖 Asistente</span>' : ''}${esc(m.text)}<time>${m.at.slice(11, 16) || ''}</time></div>`).join('') || '<div class="empty">Sin mensajes aún.</div>'}</div>
       </div>
       <div class="quick">
         ${l.value ? `<button class="btn btn-ghost btn-sm" data-qr="quote">Enviar cotización (${usd(l.value)})</button>` : ''}
         <button class="btn btn-ghost btn-sm" data-qr="member">Ofrecer membresía</button>
         <button class="btn btn-ghost btn-sm" data-qr="photos">Pedir fotos</button>
       </div>
-      <form class="reply" id="replyForm"><input class="input" name="t" placeholder="Escribe un mensaje…" autocomplete="off"><button class="btn btn-navy">Enviar</button></form>
+      <form class="reply" id="replyForm"><input class="input" name="t" placeholder="Escribe como David…" autocomplete="off"><button class="btn btn-navy">Enviar</button></form>
       <button class="btn btn-gold" data-act="convert" data-id="${l.id}">Convertir en cliente y agendar trabajo</button>
     </div>`);
   const wa = document.getElementById('wa'); wa.scrollTop = wa.scrollHeight;
+}
+
+function answerLead(id, key) {
+  const before = H.leadInsight(S.leads.find((x) => x.id === id));
+  let ev;
+  DB.update((s) => H.answerAssistant(s.leads.find((x) => x.id === id), key));
+  S = DB.load();
+  const l = S.leads.find((x) => x.id === id), after = H.leadInsight(l);
+  if (after.done && !before.done) { ev = `El asistente calificó a ${l.name}: ${after.prob}% de cierre, urgencia ${after.urgency}`; DB.update(() => {}, { kind: 'lead', text: ev }); S = DB.load(); seenEvents.add(S.events[0].id); toast('🤖 ' + esc(ev)); }
+  render(); leadDrawer(id);
 }
 
 function jobDrawer(id) {
@@ -767,9 +913,18 @@ function jobModal({ clientId = '', services = [], date = H.addDays(H.today(), 1)
 
 // ---------- events ----------
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-go],[data-lead],[data-job],[data-client],[data-act],[data-lf],[data-day],[data-cday],[data-sched],[data-qr],[data-calnav],[data-calmode],[data-caltech],[data-calgo],[data-slot]');
+  const t = e.target.closest('[data-taskdone],[data-ans],[data-go],[data-lead],[data-job],[data-client],[data-act],[data-lf],[data-day],[data-cday],[data-sched],[data-qr],[data-calnav],[data-calmode],[data-caltech],[data-calgo],[data-slot]');
   if (!t) return;
   const d = t.dataset;
+  if (d.taskdone) {
+    e.stopPropagation();
+    const key = d.taskdone, wasDone = (S.taskDone || {})[key];
+    save((st) => { st.taskDone = st.taskDone || {}; if (wasDone) delete st.taskDone[key]; else st.taskDone[key] = new Date().toISOString(); });
+    if (!wasDone) toast('Tarea completada.');
+    if (ui.drawer && ui.drawer[0] === 'lead') leadDrawer(ui.drawer[1]);
+    return;
+  }
+  if (d.ans) return answerLead(ui.drawer[1], d.ans);
   if (d.act === 'share') { e.stopPropagation(); toast('Foto lista para publicar (en la versión real se descarga en formato para Instagram y TikTok).'); return; }
   if (d.go) { ui.view = d.go; closeDrawer(); render(); window.scrollTo(0, 0); return; }
   if (d.lead) return leadDrawer(d.lead);
@@ -782,7 +937,7 @@ document.addEventListener('click', (e) => {
   if (d.calnav !== undefined) {
     const n = Number(d.calnav);
     if (n === 0) ui.jobDate = H.today();
-    else if (ui.calMode === 'dia') ui.jobDate = H.addDays(ui.jobDate, n);
+    else if (ui.calMode === 'dia') { ui.jobDate = H.addDays(ui.jobDate, n); if (isSunday(ui.jobDate)) ui.jobDate = H.addDays(ui.jobDate, n); }
     else if (ui.calMode === 'semana') ui.jobDate = H.addDays(ui.jobDate, 7 * n);
     else { const x = new Date(ui.jobDate.slice(0, 8) + '01T12:00:00'); x.setMonth(x.getMonth() + n); ui.jobDate = H.iso(x); }
     return render();
@@ -811,6 +966,7 @@ document.addEventListener('click', (e) => {
     case 'newJob': return jobModal();
     case 'newLead': return openModal(`<h3>Registrar lead</h3><form id="leadForm" style="display:grid; gap:12px">
       <div class="row2"><label class="field">Nombre<input class="input" name="name" required></label><label class="field">Teléfono<input class="input" name="phone" required></label></div>
+      <div class="row2"><label class="field">Idioma del cliente<select class="input" name="lang"><option value="en">Inglés</option><option value="es">Español</option></select></label><span></span></div>
       <div class="row2"><label class="field">Canal<select class="input" name="channel"><option>Llamada</option><option>Walk-in</option><option>WhatsApp</option></select></label><label class="field">Origen<select class="input" name="origin"><option>Orgánico</option><option>Referido</option><option>Google</option><option>Thumbtack</option></select></label></div>
       <div class="field">Interés<div class="checks">${SERVICES.map((s) => `<label><input type="checkbox" name="svc" value="${s.id}">${s.es}</label>`).join('')}</div></div>
       <div style="display:flex; gap:8px; justify-content:flex-end"><button type="button" class="btn btn-ghost" data-act="closeModal">Cancelar</button><button class="btn btn-navy">Guardar</button></div></form>`);
@@ -833,6 +989,16 @@ document.addEventListener('click', (e) => {
       const iv = setInterval(() => { p += 9; bar.style.width = Math.min(p, 100) + '%'; if (p >= 100) { clearInterval(iv); t.textContent = d.id === 'zoho' ? '42 clientes y 186 trabajos importados' : 'Ingresos y gastos del año importados'; toast('Importación simulada completa. En F0 se hace con los datos reales de David.'); } }, 120); return;
     }
     case 'soon': return toast('Disponible en la versión real.');
+    case 'autoqual': {
+      const id = ui.drawer[1];
+      const step = () => {
+        const l = S.leads.find((x) => x.id === id), q = l && H.nextQuestion(l);
+        if (!q || !ui.drawer || ui.drawer[1] !== id) return;
+        answerLead(id, q.opts[Math.random() < 0.7 ? 0 : 1][0]);
+        setTimeout(step, 900);
+      };
+      return step();
+    }
     case 'togglePins': ui.showPins = !ui.showPins; return render();
     case 'changePin': {
       if (ui.role !== 'owner') return toast('Solo David puede cambiar los PIN.');
@@ -863,7 +1029,7 @@ document.addEventListener('submit', (e) => {
   if (f.id === 'replyForm') {
     const text = fd.get('t').trim(); if (!text) return;
     const id = ui.drawer[1];
-    save((s) => { const l = s.leads.find((x) => x.id === id); l.messages.push({ dir: 'out', text, at: new Date().toISOString().slice(0, 16) }); if (l.status === 'nuevo') l.status = 'contactado'; });
+    save((s) => { const l = s.leads.find((x) => x.id === id); l.messages.push({ dir: 'out', text, at: H.stamp() }); if (l.status === 'nuevo') l.status = 'contactado'; });
     leadDrawer(id);
   }
   if (f.id === 'jobForm') {
@@ -883,7 +1049,7 @@ document.addEventListener('submit', (e) => {
   }
   if (f.id === 'leadForm') {
     const services = fd.getAll('svc');
-    save((s) => s.leads.unshift({ id: H.uid('l'), name: fd.get('name'), phone: fd.get('phone'), channel: fd.get('channel'), origin: fd.get('origin'), status: 'nuevo', services, value: services.reduce((a, id) => a + svc(id).price, 0), createdAt: H.today(), messages: [] }), { kind: 'lead', text: `Lead registrado (${fd.get('channel')}) · ${fd.get('name')}` });
+    save((s) => { const lead = { id: H.uid('l'), name: fd.get('name'), phone: fd.get('phone'), channel: fd.get('channel'), origin: fd.get('origin'), lang: fd.get('lang'), status: 'nuevo', services, value: services.reduce((a, id) => a + svc(id).price, 0), createdAt: H.today(), messages: [] }; H.startAssistant(lead); s.leads.unshift(lead); }, { kind: 'lead', text: `Lead registrado (${fd.get('channel')}) · ${fd.get('name')}. El asistente ya le escribió por WhatsApp.` });
     closeModal();
   }
   if (f.id === 'pinForm') {

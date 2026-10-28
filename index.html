@@ -384,7 +384,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="assets/config.js?v=3"></script>
-<script src="assets/store.js?v=5"></script>
+<script src="assets/store.js?v=7"></script>
 <script>
 const { PLANS, BANDS, SERVICES, helpers: H } = DB;
 const state = { band: 'M', billing: 'monthly', address: '', sqft: null, plan: null };
@@ -565,8 +565,10 @@ document.getElementById('estimateForm').addEventListener('submit', (e) => {
   const services = d.service === 'member-xl' ? [] : [d.service];
   const text = `Estimate request from website: ${d.service === 'member-xl' ? 'membership for home over 3,500 sq ft' : H.svc(d.service).name}${d.address ? ' at ' + d.address : ''}. ${d.notes || ''}`.trim();
   DB.update((s) => {
-    s.leads.unshift({ id: H.uid('l'), name: d.name, phone: d.phone, channel: 'Web', origin: 'Orgánico', status: 'nuevo', services, value: services.reduce((a, id) => a + H.svc(id).price, 0), createdAt: H.today(), messages: [{ dir: 'in', text, at: new Date().toISOString().slice(0, 16) }], isNew: true });
-  }, { kind: 'lead', text: `Nuevo lead desde la web · ${d.name}` });
+    const lead = { id: H.uid('l'), name: d.name, phone: d.phone, channel: 'Web', origin: 'Orgánico', lang: H.isSpanish(d.notes) ? 'es' : 'en', status: 'nuevo', services, value: services.reduce((a, id) => a + H.svc(id).price, 0), createdAt: H.today(), messages: [{ dir: 'in', text, at: H.stamp() }], isNew: true };
+    H.startAssistant(lead);
+    s.leads.unshift(lead);
+  }, { kind: 'lead', text: `Nuevo lead desde la web · ${d.name}. El asistente ya le escribió por WhatsApp.` });
   e.target.reset();
   toast('Thanks! Your request was sent. (Demo: it just landed in the CRM as an organic lead.)');
 });

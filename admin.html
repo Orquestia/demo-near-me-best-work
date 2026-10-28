@@ -625,7 +625,7 @@ function vManual() {
     return `<section class="card msec" id="man-${m.id}"><div class="msec-h"><span class="aic">${m.icon}</span><div><h3>${esc(m.title)}</h3><p class="muted sm" style="margin:2px 0 0">${esc(m.intro)}</p></div></div>${body}</section>`;
   };
   return `
-  <div class="banner"><div><b>Manual de ventas</b> · para que cualquier persona atienda un lead como David cuando no lo hace el asistente. El asistente del CRM sigue estas mismas preguntas y reglas.</div><span class="chip gold" style="margin-left:auto">Borrador para validar con David</span></div>
+  <div class="banner"><div><b>Manual de ventas</b> · para que cualquier persona atienda un lead como David cuando no lo hace el asistente. El asistente del CRM sigue estas mismas preguntas y reglas.</div><span class="chip gold" style="margin-left:auto">M5 · Extensión · borrador para validar con David</span></div>
   <div class="manual">
     <nav class="mtoc card">${MANUAL.map((m) => `<a data-manual="${m.id}" class="${ui.manualSec === m.id ? 'on' : ''}"><span>${m.icon}</span>${esc(m.title)}</a>`).join('')}
       <div class="seg" style="margin-top:12px"><button data-mlang="en" class="${ui.manualLang !== 'es' ? 'on' : ''}">Guiones en inglés</button><button data-mlang="es" class="${ui.manualLang === 'es' ? 'on' : ''}">Español</button></div>
